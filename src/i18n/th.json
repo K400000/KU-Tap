@@ -12,6 +12,12 @@
     "instructor": "ผู้สอน",
     "room": "ห้องเรียน",
     "credits": "หน่วยกิต",
+    "cardTextColor": "สีตัวอักษรบนการ์ดตารางเรียน",
+    "textColorOptions": {
+      "auto": "อัตโนมัติ",
+      "white": "สีขาว",
+      "black": "สีดำ"
+    },
     "days": "วัน",
     "startTime": "เวลาเริ่ม",
     "endTime": "เวลาสิ้นสุด",

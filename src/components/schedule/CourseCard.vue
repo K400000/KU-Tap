@@ -23,7 +23,7 @@ const course = computed(() => store.courses.find((c) => c.id === props.occurrenc
 
 const cardStyle = computed(() => {
   if (!course.value) return {}
-  return getCardStyles(course.value.color)
+  return getCardStyles(course.value.color, course.value.textColor)
 })
 
 const isSelected = computed(() => store.selectedCourseId === props.occurrence.courseId)
@@ -36,9 +36,9 @@ const tooltipTitle = computed(() => {
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
   const parts = [`${c.code} — ${c.name}`, `${section}: ${day} ${range}`]
-  if (c.room) parts.push(`Room: ${c.room}`)
-  if (c.instructor) parts.push(`Instructor: ${c.instructor}`)
-  if (c.credits) parts.push(`${c.credits} credits`)
+  if (c.credits !== undefined) parts.push(`${t('form.credits')}: ${c.credits}`)
+  if (c.room) parts.push(`${t('form.room')}: ${c.room}`)
+  if (c.instructor) parts.push(`${t('form.instructor')}: ${c.instructor}`)
   return parts.join('\n')
 })
 
@@ -48,17 +48,12 @@ const ariaLabel = computed(() => {
   const day = t(`day.full.${props.occurrence.day}`)
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
-  if (c.room) {
-    return t('aria.card', {
-      code: `${c.code} ${section}`,
-      name: c.name,
-      day,
-      start: formatRange(props.occurrence.start, props.occurrence.start),
-      end: formatRange(props.occurrence.end, props.occurrence.end),
-      room: c.room,
-    })
-  }
-  return `${c.code} ${c.name}, ${section} ${day} ${range}`
+  const details = [
+    c.credits !== undefined ? `${t('form.credits')}: ${c.credits}` : '',
+    c.room ? `${t('form.room')}: ${c.room}` : '',
+    c.instructor ? `${t('form.instructor')}: ${c.instructor}` : '',
+  ].filter(Boolean)
+  return [`${c.code} ${section} ${c.name}, ${day} ${range}`, ...details].join(', ')
 })
 
 function onMouseEnter() {

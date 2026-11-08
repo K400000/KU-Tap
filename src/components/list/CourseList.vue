@@ -102,8 +102,13 @@ function onMouseLeave(id: string) {
         <div class="flex-1 min-w-0 pl-2.5">
           <div class="mb-2 flex min-w-0 items-center justify-between gap-2">
             <div class="min-w-0">
-              <div class="truncate text-sm font-bold tracking-wide text-gray-900 font-kanit">{{ course.code }}</div>
-              <div class="truncate text-sm text-gray-600 font-inter">{{ course.name }}</div>
+              <div class="truncate text-[15px] font-bold tracking-wide text-gray-900 font-kanit">
+                {{ course.code }}
+                <span v-if="course.credits !== undefined" class="font-semibold text-gray-600">
+                  · {{ course.credits }} {{ t('form.credits') }}
+                </span>
+              </div>
+              <div class="truncate text-[15px] text-gray-600 font-inter">{{ course.name }}</div>
             </div>
             <span
               class="shrink-0 rounded-sm px-2 py-1 font-inter text-[10px] font-extrabold uppercase tracking-wide text-white"
@@ -126,8 +131,19 @@ function onMouseLeave(id: string) {
               <span class="text-sm text-gray-700 font-inter tabular-nums">
                 {{ formatRange(course.start, course.end) }}
               </span>
-              <span v-if="course.room" class="text-xs text-gray-600 font-inter truncate">
+              <span
+                v-if="course.room"
+                class="text-[13px] text-gray-600 font-inter truncate"
+                :title="`${t('form.room')}: ${course.room}`"
+              >
                 <i class="bi bi-geo-alt mr-1" aria-hidden="true" />{{ course.room }}
+              </span>
+              <span
+                v-if="course.instructor"
+                class="text-[13px] text-gray-600 font-inter truncate"
+                :title="`${t('form.instructor')}: ${course.instructor}`"
+              >
+                <i class="bi bi-person mr-1" aria-hidden="true" />{{ course.instructor }}
               </span>
             </div>
             <div v-if="course.lab" class="flex items-center gap-x-2.5 gap-y-1.5 flex-wrap">

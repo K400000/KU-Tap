@@ -34,6 +34,7 @@ const labDays = ref<DayId[]>([])
 const labStartTime = ref(9 * 60)
 const labEndTime = ref(10 * 60)
 const color = ref(defaultColor.value)
+const textColor = ref<'auto' | 'white' | 'black'>('auto')
 
 const errors = ref<Record<string, string>>({})
 const touched = ref<Record<string, boolean>>({})
@@ -65,6 +66,7 @@ watch(
     labStartTime.value = course.lab?.start ?? 9 * 60
     labEndTime.value = course.lab?.end ?? 10 * 60
     color.value = getThemeCourseColor(course.color, settings.theme)
+    textColor.value = course.textColor ?? 'auto'
     errors.value = {}
     touched.value = {}
   },
@@ -89,6 +91,7 @@ function resetForm() {
   labStartTime.value = 9 * 60
   labEndTime.value = 10 * 60
   color.value = defaultColor.value
+  textColor.value = 'auto'
   errors.value = {}
   touched.value = {}
 }
@@ -111,6 +114,7 @@ function buildPartialCourse(): Partial<Course> {
         }
       : undefined,
     color: color.value,
+    textColor: textColor.value === 'auto' ? undefined : textColor.value,
   }
 }
 
@@ -438,6 +442,36 @@ function deleteCourse() {
         {{ t('form.accentColor') }}
       </label>
       <ColorSwatchPicker v-model="color" />
+
+      <fieldset class="space-y-2 border-t border-slate-100 pt-3">
+        <legend class="block text-xs font-semibold text-gray-700 font-kanit">
+          {{ t('form.cardTextColor') }}
+        </legend>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="option in ['auto', 'white', 'black'] as const"
+            :key="option"
+            type="button"
+            :aria-pressed="textColor === option"
+            :class="[
+              'inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition',
+              textColor === option
+                ? 'border-indigo-500 bg-indigo-50 text-indigo-800 ring-1 ring-indigo-200'
+                : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50',
+            ]"
+            @click="textColor = option"
+          >
+            <span
+              v-if="option !== 'auto'"
+              class="h-4 w-4 rounded-full border border-slate-300"
+              :class="option === 'white' ? 'bg-white' : 'bg-black'"
+              aria-hidden="true"
+            />
+            <i v-else class="bi bi-magic" aria-hidden="true" />
+            {{ t(`form.textColorOptions.${option}`) }}
+          </button>
+        </div>
+      </fieldset>
     </div>
 
     <!-- Soft Conflict Warning -->

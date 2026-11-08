@@ -12,6 +12,12 @@
     "instructor": "Instructor",
     "room": "Room",
     "credits": "Credits",
+    "cardTextColor": "Schedule card text color",
+    "textColorOptions": {
+      "auto": "Auto",
+      "white": "White",
+      "black": "Black"
+    },
     "days": "Days",
     "startTime": "Start Time",
     "endTime": "End Time",

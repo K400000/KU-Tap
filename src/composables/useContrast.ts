@@ -7,13 +7,18 @@ export function useContrast() {
   const settings = useSettingsStore()
   const cardStyle = computed(() => themes[settings.theme]?.cardStyle ?? 'solid')
 
-  function getCardStyles(courseColor: string) {
+  function getCardStyles(courseColor: string, textColor?: 'white' | 'black') {
     const style = cardStyle.value
     const color = getThemeCourseColor(courseColor, settings.theme)
+    const text = textColor === 'white'
+      ? '#FFFFFF'
+      : textColor === 'black'
+        ? '#111111'
+        : undefined
     if (style === 'solid') {
       return {
         background: color,
-        color: autoTextColor(color),
+        color: text ?? autoTextColor(color),
         borderLeft: 'none',
       }
     }
@@ -21,7 +26,7 @@ export function useContrast() {
       const theme = themes[settings.theme]
       return {
         background: hexToRgba(color, 0.15),
-        color: theme.text,
+        color: text ?? theme.text,
         borderLeft: `4px solid ${color}`,
       }
     }
@@ -29,7 +34,7 @@ export function useContrast() {
     const theme = themes[settings.theme]
     return {
       background: theme.surface,
-      color: theme.text,
+      color: text ?? theme.text,
       borderLeft: `4px solid ${color}`,
       border: `var(--border-width) solid ${color}`,
     }

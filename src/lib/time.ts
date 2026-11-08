@@ -2,7 +2,7 @@ import type { TimeFormat } from '@/types'
 
 export const TIME_STEP = 30 // minutes
 export const DAY_START_DEFAULT = 8 * 60   // 480
-export const DAY_END_DEFAULT   = 20 * 60  // 1200
+export const DAY_END_DEFAULT   = 16 * 60  // 960
 
 /**
  * Format minutes-since-midnight to a display string.
@@ -54,4 +54,3 @@ export function generateTimeOptions(): number[] {
   }
   return opts
 }
-

@@ -24,6 +24,9 @@ describe('CourseForm.vue', () => {
     // Fill code and name
     await wrapper.find('#field-code').setValue('CS101')
     await wrapper.find('#field-name').setValue('Data Structures')
+    const whiteTextButton = wrapper.findAll('button').find((button) => button.text().trim() === 'White')
+    if (!whiteTextButton) throw new Error('White text color option was not rendered')
+    await whiteTextButton.trigger('click')
 
     // Click Monday chip (Day 0)
     const mondayBtn = wrapper.find('button[aria-label="Monday"], button[aria-label="วันจันทร์"]')
@@ -38,6 +41,7 @@ describe('CourseForm.vue', () => {
     expect(store.courses[0]?.code).toBe('CS101')
     expect(store.courses[0]?.name).toBe('Data Structures')
     expect(store.courses[0]?.days).toEqual([0])
+    expect(store.courses[0]?.textColor).toBe('white')
   })
 
   it('shows soft conflict notice when time overlaps an existing course', async () => {

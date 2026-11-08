@@ -15,6 +15,7 @@ export interface Course {
   instructor?: string
   room?: string
   credits?: number
+  textColor?: 'white' | 'black'
   days: DayId[]
   start: number // minutes since 00:00, multiple of 30
   end: number   // minutes since 00:00, > start, <= 1440
