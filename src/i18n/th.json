@@ -1,0 +1,137 @@
+{
+  "app": {
+    "title": "โปรแกรมสร้างตารางเรียน"
+  },
+  "nav": {
+    "addCourse": "เพิ่มรายวิชา",
+    "editCourse": "แก้ไขรายวิชา"
+  },
+  "form": {
+    "subjectCode": "รหัสวิชา",
+    "subjectName": "ชื่อวิชา",
+    "instructor": "ผู้สอน",
+    "room": "ห้องเรียน",
+    "credits": "หน่วยกิต",
+    "days": "วัน",
+    "startTime": "เวลาเริ่ม",
+    "endTime": "เวลาสิ้นสุด",
+    "accentColor": "สีการ์ด",
+    "addCourse": "เพิ่มรายวิชา",
+    "saveChanges": "บันทึกการเปลี่ยนแปลง",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "confirmDelete": "ยืนยันการลบ",
+    "optional": "ไม่บังคับ",
+    "loadSample": "โหลดข้อมูลตัวอย่าง",
+    "customColor": "สีกำหนดเอง",
+    "addLab": "เพิ่ม Lab",
+    "removeLab": "เอา Lab ออก",
+    "lab": "Lab"
+  },
+  "conflict": {
+    "overlapsWith": "ทับซ้อนกับ {code} จะแสดงในแถวแยก"
+  },
+  "courseType": {
+    "title": "ประเภทการเรียน",
+    "lec": "Lec",
+    "lab": "Lab",
+    "lecAndLab": "Lec & Lab"
+  },
+  "schedule": {
+    "title": "ตารางเรียนของฉัน",
+    "titlePlaceholder": "เช่น ภาคเรียนที่ 1/2569",
+    "empty": "ยังไม่มีรายวิชา เพิ่มรายวิชาแรกของคุณจากแถบด้านข้าง",
+    "emptyPrompt": "เริ่มต้นโดยเพิ่มรายวิชา"
+  },
+  "day": {
+    "0": "จ.",
+    "1": "อ.",
+    "2": "พ.",
+    "3": "พฤ.",
+    "4": "ศ.",
+    "5": "ส.",
+    "6": "อา.",
+    "full": {
+      "0": "วันจันทร์",
+      "1": "วันอังคาร",
+      "2": "วันพุธ",
+      "3": "วันพฤหัสบดี",
+      "4": "วันศุกร์",
+      "5": "วันเสาร์",
+      "6": "วันอาทิตย์"
+    }
+  },
+  "theme": {
+    "label": "ธีม",
+    "dark": "มืด",
+    "minimal": "มินิมอล",
+    "earth": "เอิร์ธโทน",
+    "cute": "คิวท์",
+    "candy": "โอเชียน",
+    "office": "ตารางออฟฟิศ"
+  },
+  "language": {
+    "label": "ภาษา",
+    "th": "ภาษาไทย",
+    "en": "English"
+  },
+  "timeFormat": {
+    "label": "รูปแบบเวลา",
+    "12h": "12 ชั่วโมง (AM/PM)",
+    "24h-intl": "24 ชั่วโมง",
+    "24h-th": "24 ชั่วโมง ไทย (น.)"
+  },
+  "export": {
+    "label": "ส่งออก",
+    "png": "ส่งออก PNG",
+    "jpg": "ส่งออก JPG",
+    "pdf": "ส่งออก PDF (แนวนอน)",
+    "scale": "ความละเอียด",
+    "scale2x": "2x (มาตรฐาน)",
+    "scale3x": "3x (สูง)",
+    "exporting": "กำลังส่งออก…",
+    "error": "ส่งออกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+    "retry": "ลองอีกครั้ง",
+    "paperSize": "ขนาดกระดาษ",
+    "a4": "A4",
+    "letter": "Letter",
+    "reduced": "ลดความละเอียดให้เหมาะกับอุปกรณ์นี้"
+  },
+  "courseList": {
+    "title": "รายวิชา",
+    "empty": "ยังไม่มีรายวิชา",
+    "edit": "แก้ไข",
+    "delete": "ลบ",
+    "autoColor": "สุ่มสีอัตโนมัติ",
+    "autoColorApplied": "สุ่มสีให้รายวิชาแล้ว"
+  },
+  "validation": {
+    "codeRequired": "กรุณากรอกรหัสวิชา",
+    "codeMaxLength": "รหัสวิชาต้องไม่เกิน 12 ตัวอักษร",
+    "nameRequired": "กรุณากรอกชื่อวิชา",
+    "nameMaxLength": "ชื่อวิชาต้องไม่เกิน 60 ตัวอักษร",
+    "instructorMaxLength": "ชื่อผู้สอนต้องไม่เกิน 40 ตัวอักษร",
+    "roomMaxLength": "ห้องเรียนต้องไม่เกิน 20 ตัวอักษร",
+    "creditsRange": "หน่วยกิตต้องอยู่ระหว่าง 0 ถึง 12",
+    "daysRequired": "เลือกอย่างน้อยหนึ่งวัน",
+    "startRequired": "กรุณาเลือกเวลาเริ่ม",
+    "startInvalid": "เวลาเริ่มไม่ถูกต้อง",
+    "endRequired": "กรุณาเลือกเวลาสิ้นสุด",
+    "endInvalid": "เวลาสิ้นสุดไม่ถูกต้อง",
+    "endAfterStart": "เวลาสิ้นสุดต้องหลังเวลาเริ่ม"
+  },
+  "toast": {
+    "courseAdded": "เพิ่มรายวิชาแล้ว",
+    "courseUpdated": "อัปเดตรายวิชาแล้ว",
+    "courseDeleted": "ลบรายวิชาแล้ว"
+  },
+  "aria": {
+    "card": "{code} {name} วัน{day} เวลา {start} ถึง {end} ห้อง {room}",
+    "cardNoRoom": "{code} {name} วัน{day} เวลา {start} ถึง {end}",
+    "openSidebar": "เปิดแผงรายวิชา",
+    "closeSidebar": "ปิดแผงรายวิชา",
+    "toggleTheme": "เปลี่ยนธีม",
+    "toggleLanguage": "เปลี่ยนภาษา",
+    "exportMenu": "ส่งออกตาราง"
+  }
+}

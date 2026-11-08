@@ -1,0 +1,137 @@
+{
+  "app": {
+    "title": "Class Schedule Builder"
+  },
+  "nav": {
+    "addCourse": "Add Course",
+    "editCourse": "Edit Course"
+  },
+  "form": {
+    "subjectCode": "Subject Code",
+    "subjectName": "Subject Name",
+    "instructor": "Instructor",
+    "room": "Room",
+    "credits": "Credits",
+    "days": "Days",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "accentColor": "Accent Color",
+    "addCourse": "Add Course",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirmDelete": "Confirm Delete",
+    "optional": "Optional",
+    "loadSample": "Load Sample Data",
+    "customColor": "Custom Color",
+    "addLab": "Add Lab",
+    "removeLab": "Remove Lab",
+    "lab": "Lab"
+  },
+  "conflict": {
+    "overlapsWith": "Overlaps with {code}, will be placed on a sub-row"
+  },
+  "courseType": {
+    "title": "Course type",
+    "lec": "Lec",
+    "lab": "Lab",
+    "lecAndLab": "Lec & Lab"
+  },
+  "schedule": {
+    "title": "My Schedule",
+    "titlePlaceholder": "e.g. Semester 1/2026",
+    "empty": "No courses yet. Add your first course from the sidebar.",
+    "emptyPrompt": "Start by adding a course"
+  },
+  "day": {
+    "0": "Mon",
+    "1": "Tue",
+    "2": "Wed",
+    "3": "Thu",
+    "4": "Fri",
+    "5": "Sat",
+    "6": "Sun",
+    "full": {
+      "0": "Monday",
+      "1": "Tuesday",
+      "2": "Wednesday",
+      "3": "Thursday",
+      "4": "Friday",
+      "5": "Saturday",
+      "6": "Sunday"
+    }
+  },
+  "theme": {
+    "label": "Theme",
+    "dark": "Dark",
+    "minimal": "Minimal",
+    "earth": "Earth Tone",
+    "cute": "Cute",
+    "candy": "Ocean",
+    "office": "Office Table"
+  },
+  "language": {
+    "label": "Language",
+    "th": "ภาษาไทย",
+    "en": "English"
+  },
+  "timeFormat": {
+    "label": "Time Format",
+    "12h": "12-hour (AM/PM)",
+    "24h-intl": "24-hour",
+    "24h-th": "24-hour Thai (น.)"
+  },
+  "export": {
+    "label": "Export",
+    "png": "Export PNG",
+    "jpg": "Export JPG",
+    "pdf": "Export PDF (Landscape)",
+    "scale": "Resolution",
+    "scale2x": "2x (Standard)",
+    "scale3x": "3x (High)",
+    "exporting": "Exporting…",
+    "error": "Export failed. Please try again.",
+    "retry": "Retry",
+    "paperSize": "Paper Size",
+    "a4": "A4",
+    "letter": "Letter",
+    "reduced": "Resolution reduced for this device"
+  },
+  "courseList": {
+    "title": "Courses",
+    "empty": "No courses added yet.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "autoColor": "Auto color",
+    "autoColorApplied": "Random colors applied to courses."
+  },
+  "validation": {
+    "codeRequired": "Subject code is required.",
+    "codeMaxLength": "Subject code must be at most 12 characters.",
+    "nameRequired": "Subject name is required.",
+    "nameMaxLength": "Subject name must be at most 60 characters.",
+    "instructorMaxLength": "Instructor name must be at most 40 characters.",
+    "roomMaxLength": "Room must be at most 20 characters.",
+    "creditsRange": "Credits must be between 0 and 12.",
+    "daysRequired": "Select at least one day.",
+    "startRequired": "Start time is required.",
+    "startInvalid": "Invalid start time.",
+    "endRequired": "End time is required.",
+    "endInvalid": "Invalid end time.",
+    "endAfterStart": "End time must be after start time."
+  },
+  "toast": {
+    "courseAdded": "Course added.",
+    "courseUpdated": "Course updated.",
+    "courseDeleted": "Course deleted."
+  },
+  "aria": {
+    "card": "{code} {name}, {day} {start} to {end}, Room {room}",
+    "cardNoRoom": "{code} {name}, {day} {start} to {end}",
+    "openSidebar": "Open course panel",
+    "closeSidebar": "Close course panel",
+    "toggleTheme": "Switch theme",
+    "toggleLanguage": "Switch language",
+    "exportMenu": "Export schedule"
+  }
+}

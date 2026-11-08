@@ -1,0 +1,23 @@
+/* Theme CSS custom properties — set by useTheme composable on :root or .schedule-canvas */
+:root {
+  --bg: #FFFFFF;
+  --surface: #FAFAFA;
+  --grid-line: #EDEDED;
+  --grid-line-strong: #D4D4D4;
+  --header-bg: #FFFFFF;
+  --header-text: #171717;
+  --day-label-bg: #F5F5F5;
+  --day-label-text: #171717;
+  --text: #171717;
+  --text-muted: #737373;
+  --title: #0A0A0A;
+  --break-bg: #F7F7F7;
+  --break-text: #A3A3A3;
+  --collision-cell-bg: #F0F0F0;
+  --collision-cell-pattern: repeating-linear-gradient(45deg, #E8E8E8 0px, #E8E8E8 1px, transparent 1px, transparent 7px);
+  --radius: 6px;
+  --shadow: none;
+  --border-width: 1px;
+  --lane-height: 72px;
+}
+
