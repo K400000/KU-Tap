@@ -2,7 +2,7 @@
 
 เว็บไซต์สำหรับจัดตารางเรียนรายสัปดาห์และส่งออกเป็นไฟล์ PNG, JPG หรือ PDF แนวนอน พัฒนาด้วย Vue 3, TypeScript, Tailwind CSS และ Pinia
 
-https://kutap-nu.vercel.app/
+https://ku-tap.vercel.app/
 
 ## เกี่ยวกับเว็บไซต์
 

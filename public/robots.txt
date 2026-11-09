@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ku-tap.vercel.app/sitemap.xml
