@@ -15,28 +15,30 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <header class="h-12 flex items-center px-3 gap-3 bg-white border-b border-gray-200 shrink-0 z-10">
-    <!-- Mobile menu button -->
-    <button
-      v-if="showMenuButton"
-      type="button"
-      @click="emit('openSidebar')"
-      :aria-label="t('aria.openSidebar')"
-      class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 transition text-gray-600"
-    >
-      <i class="bi bi-list text-xl" aria-hidden="true" />
-    </button>
+  <header
+    class="z-10 flex min-h-12 shrink-0 flex-col gap-2 border-b border-gray-200 bg-white px-2 py-2 sm:h-12 sm:min-h-0 sm:flex-row sm:items-center sm:gap-3 sm:px-3 sm:py-0"
+  >
+    <div class="flex w-full items-center justify-between gap-2 sm:flex-1">
+      <button
+        v-if="showMenuButton"
+        type="button"
+        @click="emit('openSidebar')"
+        :aria-label="t('aria.openSidebar')"
+        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-100 lg:hidden"
+      >
+        <i class="bi bi-list text-xl" aria-hidden="true" />
+      </button>
 
-    <!-- Spacer -->
-    <div class="flex-1" />
+      <div class="hidden sm:block sm:flex-1" />
+      <ThemePicker />
+    </div>
 
-    <!-- Controls -->
-    <ThemePicker />
-    <div class="w-px h-5 bg-gray-200" />
-    <TimeFormatSelect />
-    <div class="w-px h-5 bg-gray-200" />
-    <LanguageSwitch />
-    <div class="w-px h-5 bg-gray-200" />
-    <ExportMenu :canvas-el="canvasEl" />
+    <div class="flex w-full items-center justify-end gap-2 sm:w-auto sm:gap-3">
+      <TimeFormatSelect />
+      <div class="hidden h-5 w-px bg-gray-200 sm:block" />
+      <LanguageSwitch />
+      <div class="hidden h-5 w-px bg-gray-200 sm:block" />
+      <ExportMenu :canvas-el="canvasEl" />
+    </div>
   </header>
 </template>
