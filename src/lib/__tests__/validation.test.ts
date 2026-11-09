@@ -7,6 +7,7 @@ describe('validateCourse', () => {
     code: 'CS101',
     name: 'Data Structures',
     section: '800',
+    credits: 3,
     days: [0, 2],
     start: 540, // 09:00
     end: 660,   // 11:00
@@ -46,12 +47,32 @@ describe('validateCourse', () => {
     expect(validateCourse({ ...validData, credits: 1.5 }, [])).toHaveLength(0)
   })
 
+  it('requires credits for lecture and lab independently', () => {
+    const lectureErrors = validateCourse({ ...validData, credits: undefined }, [])
+    expect(lectureErrors).toContainEqual({ field: 'credits', message: 'validation.creditsRequired' })
+
+    const labErrors = validateCourse({
+      ...validData,
+      lab: { section: '830', days: [4], start: 780, end: 900 },
+    }, [])
+    expect(labErrors).toContainEqual({ field: 'labCredits', message: 'validation.creditsRequired' })
+  })
+
+  it('validates lab credits within the allowed range', () => {
+    const errors = validateCourse({
+      ...validData,
+      lab: { section: '830', credits: 9, days: [4], start: 780, end: 900 },
+    }, [])
+
+    expect(errors).toContainEqual({ field: 'labCredits', message: 'validation.creditsRange' })
+  })
+
   it('requires at least two hours for lecture and lab schedules', () => {
     expect(validateCourse({ ...validData, end: 659 }, []).map((error) => error.message))
       .toContain('validation.durationMin')
     expect(validateCourse({
       ...validData,
-      lab: { section: '830', days: [4], start: 780, end: 899 },
+      lab: { section: '830', credits: 1, days: [4], start: 780, end: 899 },
     }, []).map((error) => error.message)).toContain('validation.durationMin')
   })
 
@@ -72,7 +93,7 @@ describe('validateCourse', () => {
   it('requires valid days and time range when a lab section is added', () => {
     const errors = validateCourse({
       ...validData,
-      lab: { section: '830', days: [], start: 600, end: 600 },
+      lab: { section: '830', credits: 1, days: [], start: 600, end: 600 },
     }, [])
 
     expect(errors.map((error) => error.field)).toEqual(['labDays', 'labEnd'])
@@ -81,7 +102,7 @@ describe('validateCourse', () => {
   it('requires a separate section number for lab', () => {
     const errors = validateCourse({
       ...validData,
-      lab: { section: ' ', days: [4], start: 780, end: 900 },
+      lab: { section: ' ', credits: 1, days: [4], start: 780, end: 900 },
     }, [])
 
     expect(errors).toContainEqual({ field: 'labSection', message: 'validation.sectionRequired' })
@@ -90,7 +111,7 @@ describe('validateCourse', () => {
   it('limits lab room length to 20 characters', () => {
     const errors = validateCourse({
       ...validData,
-      lab: { section: '830', room: 'R'.repeat(21), days: [4], start: 780, end: 900 },
+      lab: { section: '830', room: 'R'.repeat(21), credits: 1, days: [4], start: 780, end: 900 },
     }, [])
 
     expect(errors).toContainEqual({ field: 'labRoom', message: 'validation.roomMaxLength' })
@@ -147,7 +168,7 @@ describe('detectConflicts', () => {
   it('detects conflicts for lab sections against existing lecture and lab times', () => {
     const conflicts = detectConflicts({
       days: [],
-      lab: { section: '830', days: [0], start: 600, end: 720 },
+      lab: { section: '830', credits: 1, days: [0], start: 600, end: 720 },
     }, existingCourses)
 
     expect(conflicts.map((conflict) => conflict.code)).toEqual(['MATH101'])

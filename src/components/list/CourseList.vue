@@ -107,6 +107,9 @@ function onMouseLeave(id: string) {
                 <span v-if="course.credits !== undefined" class="font-semibold text-gray-600">
                   · {{ course.credits }} {{ t('form.credits') }}
                 </span>
+                <span v-if="course.lab?.credits !== undefined" class="font-semibold text-gray-600">
+                  · {{ t('courseType.lab') }} {{ course.lab.credits }} {{ t('form.credits') }}
+                </span>
               </div>
               <div class="truncate text-[15px] text-gray-600 font-inter">{{ course.name }}</div>
             </div>

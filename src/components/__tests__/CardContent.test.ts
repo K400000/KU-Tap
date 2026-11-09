@@ -104,6 +104,7 @@ describe('CardContent.vue', () => {
       lab: {
         section: '830',
         room: 'SC2-402',
+        credits: 1,
         days: [4],
         start: 780,
         end: 900,
@@ -127,6 +128,7 @@ describe('CardContent.vue', () => {
     })
 
     expect(wrapper.findAll('span').some((span) => span.text() === '830')).toBe(true)
+    expect(wrapper.findAll('span').some((span) => span.text() === '1 Credits')).toBe(true)
     expect(wrapper.find('.schedule-card-details').text()).toContain('SC2-402')
     expect(wrapper.find('.schedule-card-details').text()).not.toContain('SC2-401')
   })

@@ -5,6 +5,7 @@ export type DayId = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0 = Monday … 6 = Sunday
 export interface LabSection {
   section: string
   room?: string
+  credits?: number
   days: DayId[]
   start: number
   end: number

@@ -5,6 +5,7 @@ const props = defineProps<{
   max?: number
   step?: number
   id?: string
+  required?: boolean
 }>()
 
 const emit = defineEmits<{ 'update:modelValue': [v: number | undefined] }>()
@@ -48,6 +49,7 @@ function onChange(e: Event) {
       :min="min ?? 0"
       :max="max ?? 8"
       :step="step ?? 0.5"
+      :required="required"
       @change="onChange"
       class="w-12 text-center h-9 text-sm font-inter text-gray-800 focus:outline-none tabular-nums bg-transparent border-x border-gray-200"
       placeholder="—"

@@ -38,7 +38,9 @@ export function validateCourse(
     errors.push({ field: 'section', message: 'validation.sectionMaxLength' })
   }
 
-  if (data.credits !== undefined && data.credits !== null) {
+  if (data.credits === undefined || data.credits === null) {
+    errors.push({ field: 'credits', message: 'validation.creditsRequired' })
+  } else {
     if (!Number.isFinite(data.credits) || data.credits < 0 || data.credits > 8) {
       errors.push({ field: 'credits', message: 'validation.creditsRange' })
     }
@@ -72,6 +74,11 @@ export function validateCourse(
   }
 
   if (data.lab) {
+    if (data.lab.credits === undefined || data.lab.credits === null) {
+      errors.push({ field: 'labCredits', message: 'validation.creditsRequired' })
+    } else if (!Number.isFinite(data.lab.credits) || data.lab.credits < 0 || data.lab.credits > 8) {
+      errors.push({ field: 'labCredits', message: 'validation.creditsRange' })
+    }
     if (data.lab.room && data.lab.room.length > 20) {
       errors.push({ field: 'labRoom', message: 'validation.roomMaxLength' })
     }

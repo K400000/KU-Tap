@@ -29,6 +29,7 @@ const labRoom = ref('')
 const section = ref('')
 const labSection = ref('')
 const credits = ref<number | undefined>(undefined)
+const labCredits = ref<number | undefined>(undefined)
 const days = ref<DayId[]>([])
 const startTime = ref(9 * 60)
 const endTime = ref(11 * 60)
@@ -63,6 +64,7 @@ watch(
     labRoom.value = course.lab?.room ?? course.room ?? ''
     section.value = course.section ?? ''
     credits.value = course.credits
+    labCredits.value = course.lab?.credits
     days.value = [...course.days]
     startTime.value = course.start
     endTime.value = course.end
@@ -92,6 +94,7 @@ function resetForm() {
   section.value = ''
   labSection.value = ''
   credits.value = undefined
+  labCredits.value = undefined
   days.value = []
   startTime.value = 9 * 60
   endTime.value = 11 * 60
@@ -120,6 +123,7 @@ function buildPartialCourse(): Partial<Course> {
       ? {
           section: labSection.value.trim(),
           room: labRoom.value.trim() || undefined,
+          credits: labCredits.value,
           days: labDays.value,
           start: labStartTime.value,
           end: labEndTime.value,
@@ -143,6 +147,7 @@ function toggleLab() {
   if (!hasLab.value) {
     labSection.value = ''
     labRoom.value = ''
+    labCredits.value = undefined
     labDays.value = []
     delete errors.value.labSection
     delete touched.value.labSection
@@ -184,7 +189,7 @@ function setTimeInvalid(field: string, invalid: boolean) {
 
 function submit() {
   const fields = ['code', 'name', 'section', 'days', 'start', 'end']
-  if (hasLab.value) fields.push('labSection', 'labDays', 'labStart', 'labEnd')
+  if (hasLab.value) fields.push('labSection', 'labCredits', 'labDays', 'labStart', 'labEnd')
   fields.forEach((f) => { touched.value[f] = true })
 
   const data = buildPartialCourse()
@@ -364,10 +369,12 @@ function deleteCourse() {
 
         <div class="col-span-2">
           <label for="field-credits" class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
-            {{ t('form.credits') }}
-            <span class="text-gray-400 text-xs font-normal">({{ t('form.optional') }})</span>
+            {{ t('form.credits') }} <span class="text-red-500">*</span>
           </label>
-          <CreditStepper v-model="credits" id="field-credits" :min="0" :max="8" :step="0.5" />
+          <CreditStepper v-model="credits" id="field-credits" required :min="0" :max="8" :step="0.5" />
+          <p v-if="getError('credits')" role="alert" class="mt-1 text-xs text-red-600 font-inter">
+            {{ getError('credits') }}
+          </p>
         </div>
       </div>
     </div>
@@ -483,6 +490,22 @@ function deleteCourse() {
           />
           <p v-if="getError('labSection')" role="alert" class="mt-1 text-xs text-red-600 font-inter">
             {{ getError('labSection') }}
+          </p>
+        </div>
+        <div>
+          <label for="field-labCredits" class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
+            {{ t('form.credits') }} <span class="text-red-500">*</span>
+          </label>
+          <CreditStepper
+            v-model="labCredits"
+            id="field-labCredits"
+            required
+            :min="0"
+            :max="8"
+            :step="0.5"
+          />
+          <p v-if="getError('labCredits')" role="alert" class="mt-1 text-xs text-red-600 font-inter">
+            {{ getError('labCredits') }}
           </p>
         </div>
         <div>

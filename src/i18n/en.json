@@ -129,6 +129,7 @@
     "roomMaxLength": "Room must be at most 20 characters.",
     "sectionMaxLength": "Section must be at most 20 characters.",
     "sectionRequired": "Section is required.",
+    "creditsRequired": "Credits are required.",
     "creditsRange": "Credits must be between 0 and 8.",
     "daysRequired": "Select at least one day.",
     "startRequired": "Start time is required.",

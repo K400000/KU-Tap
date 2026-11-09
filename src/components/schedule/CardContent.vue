@@ -15,6 +15,9 @@ const sectionNumber = computed(() => props.occurrence.section === 'lab'
 const room = computed(() => props.occurrence.section === 'lab'
   ? props.course.lab?.room ?? props.course.room
   : props.course.room)
+const credits = computed(() => props.occurrence.section === 'lab'
+  ? props.course.lab?.credits
+  : props.course.credits)
 </script>
 
 <template>
@@ -23,11 +26,11 @@ const room = computed(() => props.occurrence.section === 'lab'
   >
     <div class="flex min-w-0 items-center justify-between gap-1.5">
       <span
-          v-if="course.credits !== undefined"
+          v-if="credits !== undefined"
           class="truncate font-inter text-base font-bold leading-none"
-          :title="`${t('form.credits')}: ${course.credits}`"
+          :title="`${t('form.credits')}: ${credits}`"
         >
-          {{ course.credits }} {{ t('form.credits') }}
+          {{ credits }} {{ t('form.credits') }}
       </span>
       <div class="flex shrink-0 items-center gap-2">
         <span
