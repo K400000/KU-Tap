@@ -49,15 +49,6 @@ function acknowledge() {
           <i class="bi bi-instagram text-lg" aria-hidden="true" />
           <span>IG: K400000_pf</span>
         </a>
-        <a
-          href="https://github.com/K400000"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 rounded-md px-2 py-1.5 font-semibold text-slate-700 transition-colors hover:text-sky-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
-        >
-          <i class="bi bi-github text-lg" aria-hidden="true" />
-          <span>GITHUB: K400000</span>
-        </a>
       </div>
 
       <button
