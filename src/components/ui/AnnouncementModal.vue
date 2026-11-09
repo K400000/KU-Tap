@@ -35,7 +35,11 @@ function acknowledge() {
         <br><br>(และอย่ากดรีหน้าจอหากเขียนไปแล้ว เพราะมันไม่เซฟนะจั๊บ)
       </p>
 
-      <div class="mt-9 flex flex-wrap gap-4">
+      <p class="mt-9 px-1 text-base font-semibold leading-relaxed text-slate-700 sm:px-2 sm:text-lg">
+        หากต้องการสอบถามเพิ่มเติมหรือแก้บัค เพิ่มข้อมูล สามารถติดต่อได้ที่
+      </p>
+
+      <div class="mt-2 flex flex-wrap gap-4">
         <a
           href="https://www.instagram.com/K400000_pf/"
           target="_blank"

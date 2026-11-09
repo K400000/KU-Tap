@@ -80,6 +80,9 @@ defineExpose({ canvasEl })
       >
         {{ store.title || t('schedule.title') }}
       </h1>
+      <span class="shrink-0 text-sm font-semibold font-inter text-right opacity-75 sm:text-base">
+        KU-TaP | Table Planning
+      </span>
     </div>
 
     <!-- Empty state -->
