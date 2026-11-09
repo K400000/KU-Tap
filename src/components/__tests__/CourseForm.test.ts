@@ -92,6 +92,8 @@ describe('CourseForm.vue', () => {
     const addLabButton = wrapper.findAll('button').find((button) => /Add Lab|เพิ่ม Lab/.test(button.text()))
     if (!addLabButton) throw new Error('Add Lab button was not rendered')
     await addLabButton.trigger('click')
+    expect(wrapper.find('#field-lab-section').attributes('required')).toBeDefined()
+    await wrapper.find('#field-lab-section').setValue('830')
     const fridayButtons = wrapper.findAll('button[aria-label="Friday"], button[aria-label="วันศุกร์"]')
     await fridayButtons[1]?.trigger('click')
     await wrapper.find('#field-lab-end').setValue('15')
@@ -99,7 +101,7 @@ describe('CourseForm.vue', () => {
     await wrapper.find('form').trigger('submit.prevent')
 
     expect(store.courses).toHaveLength(1)
-    expect(store.courses[0]?.lab).toEqual({ days: [4], start: 780, end: 900 })
+    expect(store.courses[0]?.lab).toEqual({ section: '830', days: [4], start: 780, end: 900 })
   })
 
   it('randomizes course colors from the active theme palette', async () => {

@@ -101,7 +101,7 @@ describe('expandOccurrences & computeDayLayouts', () => {
       days: [0],
       start: 540,
       end: 600,
-      lab: { days: [4], start: 780, end: 900 },
+      lab: { section: '830', days: [4], start: 780, end: 900 },
       color: '#6366F1',
     }
 

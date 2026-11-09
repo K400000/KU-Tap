@@ -51,7 +51,7 @@ describe('validateCourse', () => {
       .toContain('validation.durationMin')
     expect(validateCourse({
       ...validData,
-      lab: { days: [4], start: 780, end: 899 },
+      lab: { section: '830', days: [4], start: 780, end: 899 },
     }, []).map((error) => error.message)).toContain('validation.durationMin')
   })
 
@@ -72,10 +72,19 @@ describe('validateCourse', () => {
   it('requires valid days and time range when a lab section is added', () => {
     const errors = validateCourse({
       ...validData,
-      lab: { days: [], start: 600, end: 600 },
+      lab: { section: '830', days: [], start: 600, end: 600 },
     }, [])
 
     expect(errors.map((error) => error.field)).toEqual(['labDays', 'labEnd'])
+  })
+
+  it('requires a separate section number for lab', () => {
+    const errors = validateCourse({
+      ...validData,
+      lab: { section: ' ', days: [4], start: 780, end: 900 },
+    }, [])
+
+    expect(errors).toContainEqual({ field: 'labSection', message: 'validation.sectionRequired' })
   })
 })
 
@@ -129,7 +138,7 @@ describe('detectConflicts', () => {
   it('detects conflicts for lab sections against existing lecture and lab times', () => {
     const conflicts = detectConflicts({
       days: [],
-      lab: { days: [0], start: 600, end: 720 },
+      lab: { section: '830', days: [0], start: 600, end: 720 },
     }, existingCourses)
 
     expect(conflicts.map((conflict) => conflict.code)).toEqual(['MATH101'])

@@ -33,7 +33,7 @@ describe('computeRange', () => {
         days: [0],
         start: 9 * 60,
         end: 11 * 60,
-        lab: { days: [4], start: 7 * 60, end: 21 * 60 + 30 },
+        lab: { section: '830', days: [4], start: 7 * 60, end: 21 * 60 + 30 },
         color: '#fff',
       },
     ]

@@ -26,6 +26,7 @@ const name = ref('')
 const instructor = ref('')
 const room = ref('')
 const section = ref('')
+const labSection = ref('')
 const credits = ref<number | undefined>(undefined)
 const days = ref<DayId[]>([])
 const startTime = ref(9 * 60)
@@ -64,6 +65,7 @@ watch(
     startTime.value = course.start
     endTime.value = course.end
     hasLab.value = !!course.lab
+    labSection.value = course.lab?.section ?? ''
     labDays.value = [...(course.lab?.days ?? [])]
     labStartTime.value = course.lab?.start ?? 9 * 60
     labEndTime.value = course.lab?.end ?? 10 * 60
@@ -85,6 +87,7 @@ function resetForm() {
   instructor.value = ''
   room.value = ''
   section.value = ''
+  labSection.value = ''
   credits.value = undefined
   days.value = []
   startTime.value = 9 * 60
@@ -112,6 +115,7 @@ function buildPartialCourse(): Partial<Course> {
     end: endTime.value,
     lab: hasLab.value
       ? {
+          section: labSection.value.trim(),
           days: labDays.value,
           start: labStartTime.value,
           end: labEndTime.value,
@@ -130,7 +134,10 @@ const conflicts = computed(() =>
 function toggleLab() {
   hasLab.value = !hasLab.value
   if (!hasLab.value) {
+    labSection.value = ''
     labDays.value = []
+    delete errors.value.labSection
+    delete touched.value.labSection
     delete errors.value.labDays
     delete errors.value.labStart
     delete errors.value.labEnd
@@ -169,7 +176,7 @@ function setTimeInvalid(field: string, invalid: boolean) {
 
 function submit() {
   const fields = ['code', 'name', 'section', 'days', 'start', 'end']
-  if (hasLab.value) fields.push('labDays', 'labStart', 'labEnd')
+  if (hasLab.value) fields.push('labSection', 'labDays', 'labStart', 'labEnd')
   fields.forEach((f) => { touched.value[f] = true })
 
   const data = buildPartialCourse()
@@ -431,6 +438,26 @@ function deleteCourse() {
 
       <div v-if="hasLab" class="space-y-4 border-t border-slate-200 pt-4">
         <h4 class="text-sm font-semibold text-gray-700 font-kanit">{{ t('courseType.lab') }}</h4>
+        <div>
+          <label for="field-lab-section" class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
+            {{ t('form.section') }} <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="field-lab-section"
+            v-model="labSection"
+            type="text"
+            maxlength="20"
+            autocomplete="off"
+            required
+            @blur="touch('labSection')"
+            @input="touch('labSection')"
+            class="w-full h-10 px-4 text-sm font-inter text-gray-900 rounded-lg border border-gray-300 bg-white shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            placeholder="e.g. 800"
+          />
+          <p v-if="getError('labSection')" role="alert" class="mt-1 text-xs text-red-600 font-inter">
+            {{ getError('labSection') }}
+          </p>
+        </div>
         <div>
           <label class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
             {{ t('form.days') }} <span class="text-red-500">*</span>

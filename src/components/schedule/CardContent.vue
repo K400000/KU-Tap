@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { PlacedOccurrence, Course } from '@/types'
 
@@ -8,6 +9,9 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const sectionNumber = computed(() => props.occurrence.section === 'lab'
+  ? props.course.lab?.section
+  : props.course.section)
 </script>
 
 <template>
@@ -25,9 +29,9 @@ const { t } = useI18n()
       <div class="flex shrink-0 items-center gap-2">
         <span
           class="shrink-0 rounded-sm border border-white/60 bg-slate-950/45 px-1 py-0.5 font-inter text-[10px] font-extrabold leading-none tracking-wide text-white"
-          :title="`${t('scheduleCard.section')}: ${course.section || '—'}`"
+          :title="`${t('scheduleCard.section')}: ${sectionNumber || '—'}`"
         >
-          {{ course.section || '—' }}
+          {{ sectionNumber || '—' }}
         </span>
         <span
           class="rounded-sm border border-white/60 bg-slate-950/45 px-1 py-0.5 font-inter text-[10px] font-extrabold uppercase leading-none tracking-wide text-white"

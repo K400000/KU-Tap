@@ -35,10 +35,11 @@ const tooltipTitle = computed(() => {
   const day = t(`day.full.${props.occurrence.day}`)
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
-  const parts = [`${c.code}${c.section ? ` (${c.section})` : ''} — ${c.name}`, `${section}: ${day} ${range}`]
+  const sectionNumber = props.occurrence.section === 'lab' ? c.lab?.section : c.section
+  const parts = [`${c.code}${sectionNumber ? ` (${sectionNumber})` : ''} — ${c.name}`, `${section}: ${day} ${range}`]
   if (c.credits !== undefined) parts.push(`${t('form.credits')}: ${c.credits}`)
   parts.push(`${t('scheduleCard.room')}: ${c.room || t('scheduleCard.contactTeacher')}`)
-  parts.push(`${t('scheduleCard.section')}: ${c.section || '—'}`)
+  parts.push(`${t('scheduleCard.section')}: ${sectionNumber || '—'}`)
   parts.push(`${t('scheduleCard.instructor')}: ${c.instructor || t('scheduleCard.notSpecified')}`)
   return parts.join('\n')
 })
@@ -49,13 +50,14 @@ const ariaLabel = computed(() => {
   const day = t(`day.full.${props.occurrence.day}`)
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
+  const sectionNumber = props.occurrence.section === 'lab' ? c.lab?.section : c.section
   const details = [
     c.credits !== undefined ? `${t('form.credits')}: ${c.credits}` : '',
     `${t('scheduleCard.room')}: ${c.room || t('scheduleCard.contactTeacher')}`,
-    `${t('scheduleCard.section')}: ${c.section || '—'}`,
+    `${t('scheduleCard.section')}: ${sectionNumber || '—'}`,
     `${t('scheduleCard.instructor')}: ${c.instructor || t('scheduleCard.notSpecified')}`,
   ].filter(Boolean)
-  return [`${c.code}${c.section ? ` (${c.section})` : ''} ${section} ${c.name}, ${day} ${range}`, ...details].join(', ')
+  return [`${c.code}${sectionNumber ? ` (${sectionNumber})` : ''} ${section} ${c.name}, ${day} ${range}`, ...details].join(', ')
 })
 
 function onMouseEnter() {
