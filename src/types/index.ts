@@ -14,10 +14,11 @@ export interface Course {
   name: string
   instructor?: string
   room?: string
+  section?: string
   credits?: number
   textColor?: 'white' | 'black'
   days: DayId[]
-  start: number // minutes since 00:00, multiple of 30
+  start: number // integer minutes since 00:00
   end: number   // minutes since 00:00, > start, <= 1440
   lab?: LabSection
   color: string // hex e.g. "#F59E0B"
@@ -42,7 +43,7 @@ export interface DayLayout {
 }
 
 export type TimeFormat = '12h' | '24h-intl' | '24h-th'
-export type ThemeId = 'dark' | 'minimal' | 'earth' | 'candy' | 'office'
+export type ThemeId = 'dark' | 'minimal' | 'earth' | 'candy' | 'office' | 'outline'
 export type Locale = 'th' | 'en'
 export type ExportFormat = 'png' | 'jpg' | 'pdf'
 export type ExportScale = 2 | 3

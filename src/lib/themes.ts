@@ -25,7 +25,7 @@ export interface ThemeTokens {
   collisionCellPattern?: string
   // Shape and style
   radius: string
-  cardStyle: 'solid' | 'tint-edge' | 'outline'
+  cardStyle: 'solid' | 'tint-edge' | 'outline' | 'soft-outline'
   borderWidth: string
   shadow: string
   // Swatches
@@ -178,16 +178,50 @@ export const themes: Record<ThemeId, ThemeTokens> = {
       '#0284C7', '#0D9488', '#B45309', '#4B5563',
     ],
   },
+  outline: {
+    id: 'outline',
+    name: 'theme.outline',
+    bg: '#FFFFFF',
+    surface: '#FFFFFF',
+    gridLine: '#E2E8F0',
+    gridLineStrong: '#94A3B8',
+    headerBg: '#F8FAFC',
+    headerText: '#1E293B',
+    dayLabelBg: '#F1F5F9',
+    dayLabelText: '#1E293B',
+    text: '#1E293B',
+    textMuted: '#64748B',
+    title: '#0F172A',
+    breakBg: '#F8FAFC',
+    breakText: '#94A3B8',
+    collisionCellBg: '#F1F5F9',
+    collisionCellPattern:
+      'repeating-linear-gradient(45deg, #E2E8F0 0px, #E2E8F0 1px, transparent 1px, transparent 7px)',
+    radius: '6px',
+    cardStyle: 'soft-outline',
+    borderWidth: '2px',
+    shadow: '0 2px 5px rgba(15,23,42,0.08)',
+    palette: [
+      '#2563EB', '#4F46E5', '#7C3AED', '#9333EA',
+      '#DC2626', '#EA580C', '#D97706', '#059669',
+      '#0D9488', '#0284C7', '#475569', '#1E293B',
+    ],
+  },
 }
 
 export const themeList = Object.values(themes)
 
 export function getThemeCourseColor(color: string, themeId: ThemeId): string {
+  const activeTheme = themes[themeId]
+  if (activeTheme.palette.some((paletteColor) => paletteColor.toUpperCase() === color.toUpperCase())) {
+    return color
+  }
+
   const paletteIndex = themeList
     .map((theme) => theme.palette.indexOf(color.toUpperCase()))
     .find((index) => index >= 0)
 
   return paletteIndex === undefined
     ? color
-    : themes[themeId].palette[paletteIndex] ?? color
+    : activeTheme.palette[paletteIndex] ?? color
 }

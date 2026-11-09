@@ -103,7 +103,7 @@ function onMouseLeave(id: string) {
           <div class="mb-2 flex min-w-0 items-center justify-between gap-2">
             <div class="min-w-0">
               <div class="truncate text-[15px] font-bold tracking-wide text-gray-900 font-kanit">
-                {{ course.code }}
+                {{ course.code }}<span v-if="course.section"> ({{ course.section }})</span>
                 <span v-if="course.credits !== undefined" class="font-semibold text-gray-600">
                   · {{ course.credits }} {{ t('form.credits') }}
                 </span>
@@ -132,11 +132,13 @@ function onMouseLeave(id: string) {
                 {{ formatRange(course.start, course.end) }}
               </span>
               <span
-                v-if="course.room"
                 class="text-[13px] text-gray-600 font-inter truncate"
-                :title="`${t('form.room')}: ${course.room}`"
+                :title="`${t('scheduleCard.room')}: ${course.room || t('scheduleCard.contactTeacher')}`"
               >
-                <i class="bi bi-geo-alt mr-1" aria-hidden="true" />{{ course.room }}
+                <i class="bi bi-geo-alt mr-1" aria-hidden="true" />{{ course.room || t('scheduleCard.contactTeacher') }}
+              </span>
+              <span v-if="course.section" class="text-[13px] text-gray-600 font-inter truncate">
+                {{ t('scheduleCard.section') }} {{ course.section }}
               </span>
               <span
                 v-if="course.instructor"

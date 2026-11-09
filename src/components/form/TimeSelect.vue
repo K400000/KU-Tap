@@ -1,55 +1,67 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTimeFormat } from '@/composables/useTimeFormat'
-import { generateTimeOptions } from '@/lib/time'
 
 const props = defineProps<{
   modelValue: number
-  min?: number  // options below this are disabled (for end time)
-  max?: number
+  allowEndOfDay?: boolean
   id?: string
 }>()
 
-const emit = defineEmits<{ 'update:modelValue': [v: number] }>()
-const { format } = useTimeFormat()
-const options = generateTimeOptions()
+const emit = defineEmits<{
+  'update:modelValue': [value: number]
+  invalid: [value: boolean]
+  blur: []
+}>()
 
-const filteredOptions = computed(() => {
-  return options.filter((o) => {
-    if (props.max !== undefined && o > props.max) return false
-    return true
-  })
+const hours = computed(() => {
+  const lastHour = props.allowEndOfDay ? 24 : 23
+  return Array.from({ length: lastHour + 1 }, (_, hour) => hour)
 })
 
-function isDisabled(opt: number) {
-  if (props.min !== undefined && opt <= props.min) return true
-  return false
+const hourValue = computed(() => props.modelValue === 1440 ? 24 : Math.floor(props.modelValue / 60))
+const minuteValue = computed(() => props.modelValue % 60)
+
+function updateTime(hour: number, minute: number) {
+  const adjustedMinute = hour === 24 ? 0 : minute
+  const value = hour * 60 + adjustedMinute
+  emit('update:modelValue', value)
+  emit('invalid', false)
 }
 
-function onChange(e: Event) {
-  emit('update:modelValue', Number((e.target as HTMLSelectElement).value))
+function onHourChange(event: Event) {
+  updateTime(Number((event.target as HTMLSelectElement).value), minuteValue.value)
+}
+
+function onMinuteChange(event: Event) {
+  updateTime(hourValue.value, Number((event.target as HTMLSelectElement).value))
 }
 </script>
 
 <template>
-  <div class="relative w-full">
+  <div class="flex w-full items-center gap-1.5">
     <select
       :id="id"
-      :value="modelValue"
-      @change="onChange"
-      class="w-full h-9 pl-3 pr-8 text-sm font-inter text-gray-800 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition tabular-nums cursor-pointer shadow-xs appearance-none"
+      :value="hourValue"
+      aria-label="Hour"
+      class="h-9 min-w-0 flex-1 appearance-none rounded-lg border border-gray-300 bg-white px-2 text-center text-sm font-inter tabular-nums text-gray-800 shadow-xs transition focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      @change="onHourChange"
+      @blur="emit('blur')"
     >
-      <option
-        v-for="opt in filteredOptions"
-        :key="opt"
-        :value="opt"
-        :disabled="isDisabled(opt)"
-      >
-        {{ format(opt) }}
+      <option v-for="hour in hours" :key="hour" :value="hour">
+        {{ String(hour).padStart(2, '0') }}
       </option>
     </select>
-    <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-gray-400">
-      <i class="bi bi-chevron-down text-xs" aria-hidden="true" />
-    </div>
+    <span class="font-inter text-sm font-semibold text-gray-500" aria-hidden="true">:</span>
+    <select
+      :id="id ? `${id}-minute` : undefined"
+      :value="minuteValue"
+      aria-label="Minute"
+      class="h-9 min-w-0 flex-1 appearance-none rounded-lg border border-gray-300 bg-white px-2 text-center text-sm font-inter tabular-nums text-gray-800 shadow-xs transition focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      @change="onMinuteChange"
+      @blur="emit('blur')"
+    >
+      <option :value="0">00</option>
+      <option :value="30" :disabled="hourValue === 24">30</option>
+    </select>
   </div>
 </template>

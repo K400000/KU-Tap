@@ -30,6 +30,14 @@ export function useContrast() {
         borderLeft: `4px solid ${color}`,
       }
     }
+    if (style === 'soft-outline') {
+      const theme = themes[settings.theme]
+      return {
+        background: '#FFFFFF',
+        color: text ?? theme.text,
+        border: `2px solid ${color}`,
+      }
+    }
     // outline
     const theme = themes[settings.theme]
     return {

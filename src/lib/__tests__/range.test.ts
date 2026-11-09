@@ -3,12 +3,12 @@ import { computeRange, computePosition, computeHourLines, computeHalfHourTicks }
 import type { Course } from '@/types'
 
 describe('computeRange', () => {
-  it('returns default 08:00 to 16:00 (480-960) when courses is empty', () => {
+  it('returns default 08:00 to 17:00 (480-1020) when courses is empty', () => {
     const res = computeRange([])
-    expect(res).toEqual({ rangeStart: 480, rangeEnd: 960 })
+    expect(res).toEqual({ rangeStart: 480, rangeEnd: 1020 })
   })
 
-  it('keeps default range if courses fall within 08:00 - 16:00', () => {
+  it('keeps default range if courses fall within 08:00 - 17:00', () => {
     const courses: Course[] = [
       {
         id: '1',
@@ -21,7 +21,7 @@ describe('computeRange', () => {
       },
     ]
     const res = computeRange(courses)
-    expect(res).toEqual({ rangeStart: 480, rangeEnd: 960 })
+    expect(res).toEqual({ rangeStart: 480, rangeEnd: 1020 })
   })
 
   it('expands to include the lab schedule', () => {
@@ -55,7 +55,7 @@ describe('computeRange', () => {
     ]
     const res = computeRange(courses)
     expect(res.rangeStart).toBe(7 * 60) // 420
-    expect(res.rangeEnd).toBe(960)
+    expect(res.rangeEnd).toBe(1020)
   })
 
   it('expands end to ceil of late course (e.g. 21:30 -> 22:00 / 1320)', () => {
@@ -93,21 +93,21 @@ describe('computeRange', () => {
 })
 
 describe('computePosition', () => {
-  it('calculates accurate left and width percentages (worked example 09:30-11:00 on 480-960)', () => {
-    // 08:00 - 16:00, span = 480
+  it('calculates accurate left and width percentages (worked example 09:30-11:00 on 480-1020)', () => {
+    // 08:00 - 17:00, span = 540
     // start 570 (09:30), end 660 (11:00)
-    // left = (570 - 480)/480 * 100 = 18.75%
-    // width = (660 - 570)/480 * 100 = 18.75%
-    const pos = computePosition(570, 660, 480, 960)
-    expect(pos.leftPct).toBeCloseTo(18.75, 4)
-    expect(pos.widthPct).toBeCloseTo(18.75, 4)
+    // left = (570 - 480)/540 * 100 = 16.666...%
+    // width = (660 - 570)/540 * 100 = 16.666...%
+    const pos = computePosition(570, 660, 480, 1020)
+    expect(pos.leftPct).toBeCloseTo(16.6667, 4)
+    expect(pos.widthPct).toBeCloseTo(16.6667, 4)
   })
 
-  it('calculates 14:30-16:00 (870-960) on 480-960', () => {
-    // left = (870-480)/480 = 81.25%
-    const pos = computePosition(870, 960, 480, 960)
-    expect(pos.leftPct).toBeCloseTo(81.25, 3)
-    expect(pos.widthPct).toBeCloseTo(18.75, 4)
+  it('calculates 14:30-16:00 (870-960) on 480-1020', () => {
+    // left = (870-480)/540 = 72.222...%
+    const pos = computePosition(870, 960, 480, 1020)
+    expect(pos.leftPct).toBeCloseTo(72.2222, 3)
+    expect(pos.widthPct).toBeCloseTo(16.6667, 4)
   })
 })
 

@@ -6,6 +6,7 @@ describe('validateCourse', () => {
   const validData: Partial<Course> = {
     code: 'CS101',
     name: 'Data Structures',
+    section: '800',
     days: [0, 2],
     start: 540, // 09:00
     end: 660,   // 11:00
@@ -38,10 +39,34 @@ describe('validateCourse', () => {
     expect(errLess.some((e) => e.field === 'end')).toBe(true)
   })
 
-  it('fails if credits out of 0-12 range', () => {
+  it('fails if credits out of 0-8 range', () => {
     expect(validateCourse({ ...validData, credits: -1 }, [])[0]?.field).toBe('credits')
-    expect(validateCourse({ ...validData, credits: 13 }, [])[0]?.field).toBe('credits')
+    expect(validateCourse({ ...validData, credits: 9 }, [])[0]?.field).toBe('credits')
+    expect(validateCourse({ ...validData, credits: 8 }, [])).toHaveLength(0)
     expect(validateCourse({ ...validData, credits: 1.5 }, [])).toHaveLength(0)
+  })
+
+  it('requires at least two hours for lecture and lab schedules', () => {
+    expect(validateCourse({ ...validData, end: 659 }, []).map((error) => error.message))
+      .toContain('validation.durationMin')
+    expect(validateCourse({
+      ...validData,
+      lab: { days: [4], start: 780, end: 899 },
+    }, []).map((error) => error.message)).toContain('validation.durationMin')
+  })
+
+  it('accepts typed times at minute precision', () => {
+    expect(validateCourse({ ...validData, start: 555, end: 675 }, [])).toHaveLength(0)
+  })
+
+  it('fails if section exceeds 20 characters', () => {
+    expect(validateCourse({ ...validData, section: '1'.repeat(21) }, [])[0]?.field).toBe('section')
+    expect(validateCourse({ ...validData, section: '800' }, [])).toHaveLength(0)
+  })
+
+  it('requires a section number', () => {
+    expect(validateCourse({ ...validData, section: '' }, [])[0]?.field).toBe('section')
+    expect(validateCourse({ ...validData, section: '  ' }, [])[0]?.message).toBe('validation.sectionRequired')
   })
 
   it('requires valid days and time range when a lab section is added', () => {

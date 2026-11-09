@@ -11,6 +11,7 @@
     "subjectName": "Subject Name",
     "instructor": "Instructor",
     "room": "Room",
+    "section": "Section",
     "credits": "Credits",
     "cardTextColor": "Schedule card text color",
     "textColorOptions": {
@@ -49,6 +50,13 @@
     "empty": "No courses yet. Add your first course from the sidebar.",
     "emptyPrompt": "Start by adding a course"
   },
+  "scheduleCard": {
+    "room": "Room",
+    "section": "Section/sec",
+    "instructor": "Instructor",
+    "contactTeacher": "Contact Teacher",
+    "notSpecified": "Not specified"
+  },
   "day": {
     "0": "Mon",
     "1": "Tue",
@@ -74,7 +82,8 @@
     "earth": "Earth Tone",
     "cute": "Cute",
     "candy": "Ocean",
-    "office": "Office Table"
+    "office": "Office Table",
+    "outline": "Soft Outline"
   },
   "language": {
     "label": "Language",
@@ -118,13 +127,17 @@
     "nameMaxLength": "Subject name must be at most 60 characters.",
     "instructorMaxLength": "Instructor name must be at most 40 characters.",
     "roomMaxLength": "Room must be at most 20 characters.",
-    "creditsRange": "Credits must be between 0 and 12.",
+    "sectionMaxLength": "Section must be at most 20 characters.",
+    "sectionRequired": "Section is required.",
+    "creditsRange": "Credits must be between 0 and 8.",
     "daysRequired": "Select at least one day.",
     "startRequired": "Start time is required.",
     "startInvalid": "Invalid start time.",
+    "timeInvalid": "Enter a valid time in HH:MM format.",
     "endRequired": "End time is required.",
     "endInvalid": "Invalid end time.",
-    "endAfterStart": "End time must be after start time."
+    "endAfterStart": "End time must be after start time.",
+    "durationMin": "Each course section must be at least 2 hours."
   },
   "toast": {
     "courseAdded": "Course added.",

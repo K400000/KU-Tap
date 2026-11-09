@@ -35,10 +35,11 @@ const tooltipTitle = computed(() => {
   const day = t(`day.full.${props.occurrence.day}`)
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
-  const parts = [`${c.code} — ${c.name}`, `${section}: ${day} ${range}`]
+  const parts = [`${c.code}${c.section ? ` (${c.section})` : ''} — ${c.name}`, `${section}: ${day} ${range}`]
   if (c.credits !== undefined) parts.push(`${t('form.credits')}: ${c.credits}`)
-  if (c.room) parts.push(`${t('form.room')}: ${c.room}`)
-  if (c.instructor) parts.push(`${t('form.instructor')}: ${c.instructor}`)
+  parts.push(`${t('scheduleCard.room')}: ${c.room || t('scheduleCard.contactTeacher')}`)
+  parts.push(`${t('scheduleCard.section')}: ${c.section || '—'}`)
+  parts.push(`${t('scheduleCard.instructor')}: ${c.instructor || t('scheduleCard.notSpecified')}`)
   return parts.join('\n')
 })
 
@@ -50,10 +51,11 @@ const ariaLabel = computed(() => {
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
   const details = [
     c.credits !== undefined ? `${t('form.credits')}: ${c.credits}` : '',
-    c.room ? `${t('form.room')}: ${c.room}` : '',
-    c.instructor ? `${t('form.instructor')}: ${c.instructor}` : '',
+    `${t('scheduleCard.room')}: ${c.room || t('scheduleCard.contactTeacher')}`,
+    `${t('scheduleCard.section')}: ${c.section || '—'}`,
+    `${t('scheduleCard.instructor')}: ${c.instructor || t('scheduleCard.notSpecified')}`,
   ].filter(Boolean)
-  return [`${c.code} ${section} ${c.name}, ${day} ${range}`, ...details].join(', ')
+  return [`${c.code}${c.section ? ` (${c.section})` : ''} ${section} ${c.name}, ${day} ${range}`, ...details].join(', ')
 })
 
 function onMouseEnter() {
@@ -75,8 +77,8 @@ function onMouseLeave() {
       position: 'absolute',
       left: `${leftPct}%`,
       width: `${widthPct}%`,
-      top: '2px',
-      bottom: '2px',
+      top: '0',
+      bottom: '0',
       marginInline: '1px',
       borderRadius: 'var(--radius)',
       boxShadow: isHovered ? '0 4px 12px rgba(0,0,0,0.22)' : 'var(--shadow)',
@@ -100,6 +102,6 @@ function onMouseLeave() {
     @keydown.enter="emit('select', course!.id)"
     @keydown.space.prevent="emit('select', course!.id)"
   >
-    <CardContent :occurrence="occurrence" :course="course" :width-pct="widthPct" />
+    <CardContent :occurrence="occurrence" :course="course" />
   </div>
 </template>

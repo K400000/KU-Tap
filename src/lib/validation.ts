@@ -1,5 +1,4 @@
 import type { Course } from '@/types'
-import { TIME_STEP } from './time'
 
 export interface ValidationError {
   field: string
@@ -33,8 +32,14 @@ export function validateCourse(
     errors.push({ field: 'room', message: 'validation.roomMaxLength' })
   }
 
+  if (!data.section?.trim()) {
+    errors.push({ field: 'section', message: 'validation.sectionRequired' })
+  } else if (data.section.trim().length > 20) {
+    errors.push({ field: 'section', message: 'validation.sectionMaxLength' })
+  }
+
   if (data.credits !== undefined && data.credits !== null) {
-    if (data.credits < 0 || data.credits > 12) {
+    if (!Number.isFinite(data.credits) || data.credits < 0 || data.credits > 8) {
       errors.push({ field: 'credits', message: 'validation.creditsRange' })
     }
   }
@@ -48,32 +53,40 @@ export function validateCourse(
 
   if (start === undefined || start === null) {
     errors.push({ field: 'start', message: 'validation.startRequired' })
-  } else if (start % TIME_STEP !== 0 || start < 0 || start >= 1440) {
+  } else if (!Number.isInteger(start) || start < 0 || start >= 1440) {
     errors.push({ field: 'start', message: 'validation.startInvalid' })
   }
 
   if (end === undefined || end === null) {
     errors.push({ field: 'end', message: 'validation.endRequired' })
-  } else if (end % TIME_STEP !== 0 || end <= 0 || end > 1440) {
+  } else if (!Number.isInteger(end) || end <= 0 || end > 1440) {
     errors.push({ field: 'end', message: 'validation.endInvalid' })
   }
 
-  if (start !== undefined && end !== undefined && end <= start) {
-    errors.push({ field: 'end', message: 'validation.endAfterStart' })
+  if (start !== undefined && end !== undefined && Number.isInteger(start) && Number.isInteger(end)) {
+    if (end <= start) {
+      errors.push({ field: 'end', message: 'validation.endAfterStart' })
+    } else if (end - start < 120) {
+      errors.push({ field: 'end', message: 'validation.durationMin' })
+    }
   }
 
   if (data.lab) {
     if (!data.lab.days.length) {
       errors.push({ field: 'labDays', message: 'validation.daysRequired' })
     }
-    if (data.lab.start % TIME_STEP !== 0 || data.lab.start < 0 || data.lab.start >= 1440) {
+    if (!Number.isInteger(data.lab.start) || data.lab.start < 0 || data.lab.start >= 1440) {
       errors.push({ field: 'labStart', message: 'validation.startInvalid' })
     }
-    if (data.lab.end % TIME_STEP !== 0 || data.lab.end <= 0 || data.lab.end > 1440) {
+    if (!Number.isInteger(data.lab.end) || data.lab.end <= 0 || data.lab.end > 1440) {
       errors.push({ field: 'labEnd', message: 'validation.endInvalid' })
     }
-    if (data.lab.end <= data.lab.start) {
-      errors.push({ field: 'labEnd', message: 'validation.endAfterStart' })
+    if (Number.isInteger(data.lab.start) && Number.isInteger(data.lab.end)) {
+      if (data.lab.end <= data.lab.start) {
+        errors.push({ field: 'labEnd', message: 'validation.endAfterStart' })
+      } else if (data.lab.end - data.lab.start < 120) {
+        errors.push({ field: 'labEnd', message: 'validation.durationMin' })
+      }
     }
   }
 

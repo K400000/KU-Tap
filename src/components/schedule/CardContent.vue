@@ -1,83 +1,64 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTimeFormat } from '@/composables/useTimeFormat'
 import type { PlacedOccurrence, Course } from '@/types'
 
 const props = defineProps<{
   occurrence: PlacedOccurrence
   course: Course
-  widthPct: number  // used to determine content tier
 }>()
 
-const { formatRange } = useTimeFormat()
 const { t } = useI18n()
-const range = computed(() => formatRange(props.occurrence.start, props.occurrence.end))
-
-// Content tier is approximated by widthPct relative to the full range
-// We use a reactive container approach: render all and CSS clamps the rest
-// Approximate: total grid is ~1200px, so 1% ~ 12px
-const approxPx = computed(() => props.widthPct * 12)
-const tier = computed(() => {
-  const px = approxPx.value
-  if (px >= 160) return 'full'
-  if (px >= 100) return 'mid'
-  if (px >= 56)  return 'compact'
-  return 'tiny'
-})
 </script>
 
 <template>
   <div
-    class="schedule-card-content flex h-full min-w-0 flex-col justify-center gap-0.5 overflow-hidden px-2.5 py-0.5 text-left"
+    class="schedule-card-content grid h-full min-w-0 grid-rows-[auto_1fr_auto] overflow-hidden px-2.5 py-1 text-left"
   >
     <div class="flex min-w-0 items-center justify-between gap-1.5">
-      <div class="flex min-w-0 items-center gap-1.5 overflow-hidden whitespace-nowrap">
-        <span class="shrink-0 font-kanit text-sm font-bold leading-none">
-          {{ course.code }}
-        </span>
-        <span
+      <span
           v-if="course.credits !== undefined"
-          class="truncate font-inter text-xs font-semibold leading-none"
+          class="truncate font-inter text-base font-bold leading-none"
           :title="`${t('form.credits')}: ${course.credits}`"
         >
           {{ course.credits }} {{ t('form.credits') }}
+      </span>
+      <div class="flex shrink-0 items-center gap-2">
+        <span
+          class="shrink-0 rounded-sm border border-white/60 bg-slate-950/45 px-1 py-0.5 font-inter text-[10px] font-extrabold leading-none tracking-wide text-white"
+          :title="`${t('scheduleCard.section')}: ${course.section || '—'}`"
+        >
+          {{ course.section || '—' }}
+        </span>
+        <span
+          class="rounded-sm border border-white/60 bg-slate-950/45 px-1 py-0.5 font-inter text-[10px] font-extrabold uppercase leading-none tracking-wide text-white"
+        >
+          {{ t(`courseType.${occurrence.section ?? 'lec'}`) }}
         </span>
       </div>
+    </div>
+    <div class="flex min-h-0 flex-col items-center justify-center gap-0.5 overflow-hidden text-center font-inter text-lg font-bold">
+      <div class="max-w-full truncate whitespace-nowrap" :title="course.code">
+        {{ course.code }}
+      </div>
+      <div class="max-w-full truncate whitespace-nowrap" :title="course.name">
+        {{ course.name }}
+      </div>
+    </div>
+    <div class="schedule-card-details flex min-w-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap text-center font-inter text-sm font-bold">
       <span
-        class="shrink-0 rounded-sm border border-white/70 bg-slate-950/45 px-1.5 py-0.5 font-inter text-[11px] font-extrabold uppercase leading-none tracking-wide text-white"
-      >
-        {{ t(`courseType.${occurrence.section ?? 'lec'}`) }}
-      </span>
-    </div>
-    <div
-      v-if="tier !== 'tiny'"
-      class="truncate whitespace-nowrap font-inter text-[13px]"
-      :title="course.name"
-    >
-      {{ course.name }}
-    </div>
-    <div
-      v-if="(tier === 'full' || tier === 'mid') && course.instructor"
-      class="min-w-0 truncate whitespace-nowrap font-inter text-xs font-medium"
-      :title="`${t('form.instructor')}: ${course.instructor}`"
-    >
-      <i class="bi bi-person" aria-hidden="true" />
-      {{ course.instructor }}
-    </div>
-    <div
-      v-if="tier === 'full' || tier === 'mid'"
-      class="flex min-w-0 items-center gap-1.5 overflow-hidden whitespace-nowrap font-inter text-[13px] font-bold tabular-nums"
-    >
-      <i class="bi bi-clock shrink-0" aria-hidden="true" />
-      <span class="shrink-0">{{ range }}</span>
-      <span
-        v-if="course.room"
-        class="min-w-0 truncate font-normal"
-        :title="`${t('form.room')}: ${course.room}`"
+        class="min-w-0 truncate"
+        :title="`${t('scheduleCard.room')}: ${course.room || t('scheduleCard.contactTeacher')}`"
       >
         <i class="bi bi-geo-alt" aria-hidden="true" />
-        {{ course.room }}
+        {{ course.room || t('scheduleCard.contactTeacher') }}
+      </span>
+      <span class="shrink-0">|</span>
+      <span
+        class="min-w-0 truncate"
+        :title="`${t('scheduleCard.instructor')}: ${course.instructor || t('scheduleCard.notSpecified')}`"
+      >
+        <i class="bi bi-person" aria-hidden="true" />
+        {{ course.instructor || t('scheduleCard.notSpecified') }}
       </span>
     </div>
   </div>
@@ -87,5 +68,9 @@ const tier = computed(() => {
 .schedule-card-content,
 .schedule-card-content * {
   line-height: 1.2;
+}
+
+.schedule-card-content .bi {
+  -webkit-text-stroke: 0.6px currentColor;
 }
 </style>

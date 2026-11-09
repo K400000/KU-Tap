@@ -25,14 +25,15 @@ const code = ref('')
 const name = ref('')
 const instructor = ref('')
 const room = ref('')
+const section = ref('')
 const credits = ref<number | undefined>(undefined)
 const days = ref<DayId[]>([])
 const startTime = ref(9 * 60)
-const endTime = ref(10 * 60)
+const endTime = ref(11 * 60)
 const hasLab = ref(false)
 const labDays = ref<DayId[]>([])
 const labStartTime = ref(9 * 60)
-const labEndTime = ref(10 * 60)
+const labEndTime = ref(11 * 60)
 const color = ref(defaultColor.value)
 const textColor = ref<'auto' | 'white' | 'black'>('auto')
 
@@ -57,6 +58,7 @@ watch(
     name.value = course.name
     instructor.value = course.instructor ?? ''
     room.value = course.room ?? ''
+    section.value = course.section ?? ''
     credits.value = course.credits
     days.value = [...course.days]
     startTime.value = course.start
@@ -82,14 +84,15 @@ function resetForm() {
   name.value = ''
   instructor.value = ''
   room.value = ''
+  section.value = ''
   credits.value = undefined
   days.value = []
   startTime.value = 9 * 60
-  endTime.value = 10 * 60
+  endTime.value = 11 * 60
   hasLab.value = false
   labDays.value = []
   labStartTime.value = 9 * 60
-  labEndTime.value = 10 * 60
+  labEndTime.value = 11 * 60
   color.value = defaultColor.value
   textColor.value = 'auto'
   errors.value = {}
@@ -102,6 +105,7 @@ function buildPartialCourse(): Partial<Course> {
     name: name.value.trim(),
     instructor: instructor.value.trim() || undefined,
     room: room.value.trim() || undefined,
+    section: section.value.trim() || undefined,
     credits: credits.value,
     days: days.value,
     start: startTime.value,
@@ -154,8 +158,17 @@ function validateField(field: string) {
   }
 }
 
+function setTimeInvalid(field: string, invalid: boolean) {
+  if (invalid) {
+    touched.value[field] = true
+    errors.value[field] = t('validation.timeInvalid')
+  } else if (touched.value[field]) {
+    validateField(field)
+  }
+}
+
 function submit() {
-  const fields = ['code', 'name', 'days', 'start', 'end']
+  const fields = ['code', 'name', 'section', 'days', 'start', 'end']
   if (hasLab.value) fields.push('labDays', 'labStart', 'labEnd')
   fields.forEach((f) => { touched.value[f] = true })
 
@@ -294,7 +307,7 @@ function deleteCourse() {
         </p>
       </div>
 
-      <!-- Room & Credits row -->
+      <!-- Room, Section & Credits -->
       <div class="grid grid-cols-2 gap-3 items-start">
         <div>
           <label for="field-room" class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
@@ -314,11 +327,32 @@ function deleteCourse() {
         </div>
 
         <div>
+          <label for="field-section" class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
+            {{ t('form.section') }} <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="field-section"
+            v-model="section"
+            type="text"
+            maxlength="20"
+            autocomplete="off"
+            required
+            @blur="touch('section')"
+            @input="touch('section')"
+            class="w-full h-10 px-4 text-sm font-inter text-gray-900 rounded-lg border border-gray-300 bg-white shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            placeholder="e.g. 800"
+          />
+          <p v-if="getError('section')" role="alert" aria-live="polite" class="mt-1 text-xs text-red-600 font-inter">
+            {{ getError('section') }}
+          </p>
+        </div>
+
+        <div class="col-span-2">
           <label for="field-credits" class="block text-xs font-semibold text-gray-700 mb-1.5 font-kanit">
             {{ t('form.credits') }}
             <span class="text-gray-400 text-xs font-normal">({{ t('form.optional') }})</span>
           </label>
-          <CreditStepper v-model="credits" id="field-credits" :min="0" :max="12" :step="0.5" />
+          <CreditStepper v-model="credits" id="field-credits" :min="0" :max="8" :step="0.5" />
         </div>
       </div>
     </div>
@@ -346,8 +380,9 @@ function deleteCourse() {
             <TimeSelect
               id="field-start"
               v-model="startTime"
-              :max="endTime - 30"
-              @update:model-value="() => { touch('start'); if (endTime <= startTime) endTime = startTime + 30 }"
+              @update:model-value="touch('start')"
+              @invalid="setTimeInvalid('start', $event)"
+              @blur="touch('start')"
             />
             <p v-if="getError('start')" role="alert" aria-live="polite" class="mt-1 text-xs text-red-600 font-inter">
               {{ getError('start') }}
@@ -361,8 +396,10 @@ function deleteCourse() {
             <TimeSelect
               id="field-end"
               v-model="endTime"
-              :min="startTime"
+              allow-end-of-day
               @update:model-value="touch('end')"
+              @invalid="setTimeInvalid('end', $event)"
+              @blur="touch('end')"
             />
             <p v-if="getError('end')" role="alert" aria-live="polite" class="mt-1 text-xs text-red-600 font-inter">
               {{ getError('end') }}
@@ -411,8 +448,9 @@ function deleteCourse() {
             <TimeSelect
               id="field-lab-start"
               v-model="labStartTime"
-              :max="labEndTime - 30"
-              @update:model-value="() => { touch('labStart'); if (labEndTime <= labStartTime) labEndTime = labStartTime + 30 }"
+              @update:model-value="touch('labStart')"
+              @invalid="setTimeInvalid('labStart', $event)"
+              @blur="touch('labStart')"
             />
             <p v-if="getError('labStart')" role="alert" class="mt-1 text-xs text-red-600 font-inter">
               {{ getError('labStart') }}
@@ -425,8 +463,10 @@ function deleteCourse() {
             <TimeSelect
               id="field-lab-end"
               v-model="labEndTime"
-              :min="labStartTime"
+              allow-end-of-day
               @update:model-value="touch('labEnd')"
+              @invalid="setTimeInvalid('labEnd', $event)"
+              @blur="touch('labEnd')"
             />
             <p v-if="getError('labEnd')" role="alert" class="mt-1 text-xs text-red-600 font-inter">
               {{ getError('labEnd') }}

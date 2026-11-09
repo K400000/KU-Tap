@@ -20,7 +20,7 @@ function decrement() {
 function increment() {
   const current = props.modelValue ?? 0
   const step = props.step ?? 0.5
-  const max = props.max ?? 12
+  const max = props.max ?? 8
   const val = Math.min(max, Math.round((current + step) * 10) / 10)
   emit('update:modelValue', val)
 }
@@ -46,7 +46,7 @@ function onChange(e: Event) {
       type="number"
       :value="modelValue ?? ''"
       :min="min ?? 0"
-      :max="max ?? 12"
+      :max="max ?? 8"
       :step="step ?? 0.5"
       @change="onChange"
       class="w-12 text-center h-9 text-sm font-inter text-gray-800 focus:outline-none tabular-nums bg-transparent border-x border-gray-200"

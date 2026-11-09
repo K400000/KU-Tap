@@ -24,6 +24,10 @@ describe('CourseForm.vue', () => {
     // Fill code and name
     await wrapper.find('#field-code').setValue('CS101')
     await wrapper.find('#field-name').setValue('Data Structures')
+    expect(wrapper.find('#field-section').attributes('required')).toBeDefined()
+    expect(wrapper.find('#field-section').element.parentElement?.textContent).not.toContain('Optional')
+    await wrapper.find('#field-section').setValue('800')
+    expect(wrapper.find('#field-credits').attributes('max')).toBe('8')
     const whiteTextButton = wrapper.findAll('button').find((button) => button.text().trim() === 'White')
     if (!whiteTextButton) throw new Error('White text color option was not rendered')
     await whiteTextButton.trigger('click')
@@ -41,6 +45,7 @@ describe('CourseForm.vue', () => {
     expect(store.courses[0]?.code).toBe('CS101')
     expect(store.courses[0]?.name).toBe('Data Structures')
     expect(store.courses[0]?.days).toEqual([0])
+    expect(store.courses[0]?.section).toBe('800')
     expect(store.courses[0]?.textColor).toBe('white')
   })
 
@@ -65,7 +70,7 @@ describe('CourseForm.vue', () => {
     const mondayBtn = wrapper.find('button[aria-label="Monday"], button[aria-label="วันจันทร์"]')
     await mondayBtn.trigger('click')
 
-    // Default start is 09:00 (540) and end is 10:00 (600), which overlaps MATH101 (09:00-11:00)
+    // Default start is 09:00 (540) and end is 11:00 (660), which overlaps MATH101 (09:00-11:00)
     await wrapper.vm.$nextTick()
 
     // Conflict banner should appear
@@ -82,14 +87,15 @@ describe('CourseForm.vue', () => {
 
     await wrapper.find('#field-code').setValue('CS101')
     await wrapper.find('#field-name').setValue('Data Structures')
+    await wrapper.find('#field-section').setValue('800')
     await wrapper.find('button[aria-label="Monday"], button[aria-label="วันจันทร์"]').trigger('click')
     const addLabButton = wrapper.findAll('button').find((button) => /Add Lab|เพิ่ม Lab/.test(button.text()))
     if (!addLabButton) throw new Error('Add Lab button was not rendered')
     await addLabButton.trigger('click')
     const fridayButtons = wrapper.findAll('button[aria-label="Friday"], button[aria-label="วันศุกร์"]')
     await fridayButtons[1]?.trigger('click')
-    await wrapper.find('#field-lab-end').setValue('900')
-    await wrapper.find('#field-lab-start').setValue('780')
+    await wrapper.find('#field-lab-end').setValue('15')
+    await wrapper.find('#field-lab-start').setValue('13')
     await wrapper.find('form').trigger('submit.prevent')
 
     expect(store.courses).toHaveLength(1)
@@ -120,24 +126,49 @@ describe('CourseForm.vue', () => {
     expect(store.courses[0]?.color).not.toBe('#123456')
   })
 
-  it('disables end times earlier than or equal to start time', () => {
+  it('selects hours from 00 to 24 and minutes in 30-minute increments', async () => {
     const wrapper = mount(TimeSelect, {
       props: {
-        modelValue: 600, // 10:00
-        min: 540,        // Start is 09:00 (540), so options <= 540 are disabled
+        modelValue: 600,
+        allowEndOfDay: true,
+        id: 'field-start',
       },
       global: {
         plugins: [i18n],
       },
     })
 
-    const options = wrapper.findAll('option')
-    const opt0900 = options.find((o) => o.attributes('value') === '540')
-    const opt0830 = options.find((o) => o.attributes('value') === '510')
-    const opt0930 = options.find((o) => o.attributes('value') === '570')
+    const hourSelect = wrapper.find('#field-start')
+    const minuteSelect = wrapper.find('#field-start-minute')
+    expect(hourSelect.findAll('option')).toHaveLength(25)
+    expect(hourSelect.findAll('option')[0]?.text()).toBe('00')
+    expect(hourSelect.findAll('option')[24]?.text()).toBe('24')
+    expect(minuteSelect.findAll('option').map((option) => option.text())).toEqual(['00', '30'])
 
-    expect(opt0900?.attributes('disabled')).toBeDefined()
-    expect(opt0830?.attributes('disabled')).toBeDefined()
-    expect(opt0930?.attributes('disabled')).toBeUndefined()
+    await hourSelect.setValue('9')
+    await minuteSelect.setValue('30')
+    const updates = wrapper.emitted('update:modelValue') ?? []
+    expect(updates[updates.length - 1]).toEqual([570])
+  })
+
+  it('only allows 24:00 as the end-of-day time', async () => {
+    const wrapper = mount(TimeSelect, {
+      props: { modelValue: 1440, allowEndOfDay: true, id: 'end-time' },
+    })
+
+    const hourSelect = wrapper.find('#end-time')
+    const minuteSelect = wrapper.find('#end-time-minute')
+    expect((hourSelect.element as HTMLSelectElement).value).toBe('24')
+    expect((minuteSelect.element as HTMLSelectElement).value).toBe('0')
+    expect(minuteSelect.find('option[value="30"]').attributes('disabled')).toBeDefined()
+  })
+
+  it('loads mock courses with sections and white text', () => {
+    const store = useScheduleStore()
+    store.loadSampleData()
+
+    expect(store.courses.length).toBeGreaterThan(0)
+    expect(store.courses.every((course) => course.section && course.textColor === 'white')).toBe(true)
+    expect(store.courses.every((course) => course.end - course.start >= 120)).toBe(true)
   })
 })

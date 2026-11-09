@@ -7,6 +7,8 @@ import CardContent from '../schedule/CardContent.vue'
 import CourseCard from '../schedule/CourseCard.vue'
 import CourseList from '../list/CourseList.vue'
 import { useScheduleStore } from '@/stores/scheduleStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useContrast } from '@/composables/useContrast'
 
 describe('CardContent.vue', () => {
   beforeEach(() => {
@@ -20,6 +22,7 @@ describe('CardContent.vue', () => {
       name: 'Data Structures',
       instructor: 'Dr. Smith',
       room: '301',
+      section: '800',
       credits: 3,
       days: [0],
       start: 540,
@@ -35,25 +38,60 @@ describe('CardContent.vue', () => {
       section: 'lec',
     }
     const wrapper = mount(CardContent, {
-      props: { course, occurrence, widthPct: 25 },
+      props: { course, occurrence },
       global: { plugins: [i18n] },
     })
 
     expect(wrapper.text()).toContain('3 Credits')
     expect(wrapper.text()).toContain('301')
     expect(wrapper.text()).toContain('Dr. Smith')
-    expect(wrapper.find('.font-kanit').element.parentElement?.textContent).toContain('3 Credits')
-    const timeRow = wrapper.find('.bi-clock').element.parentElement
-    expect(timeRow?.textContent).toContain('09:00 - 11:00')
-    expect(timeRow?.textContent?.indexOf('09:00 - 11:00')).toBeLessThan(timeRow?.textContent?.indexOf('301') ?? -1)
-    expect(timeRow?.querySelector('.bi-geo-alt')).not.toBeNull()
-    const instructorRow = wrapper.find('.bi-person').element.parentElement
-    expect(instructorRow?.textContent).toContain('Dr. Smith')
-    const instructorPrecedesTime = instructorRow && timeRow
-      ? (instructorRow.compareDocumentPosition(timeRow) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
-      : false
-    expect(instructorPrecedesTime).toBe(true)
-    expect(instructorRow?.className).toContain('text-xs')
+    const header = wrapper.find('.schedule-card-content > div:first-child')
+    expect(header.text()).toContain('3 Credits')
+    expect(header.text()).not.toContain('CS101')
+    expect(header.findAll('span')[0]?.classes()).toContain('text-base')
+    const sectionBadge = wrapper.findAll('span').find((badge) => badge.text() === '800')
+    expect(sectionBadge?.text()).toBe('800')
+    expect(sectionBadge?.classes()).toContain('border')
+    expect(sectionBadge?.classes()).toContain('text-[10px]')
+    expect(wrapper.text()).toContain('Lec')
+    const detailsRow = wrapper.find('.schedule-card-details')
+    expect(detailsRow.text()).toContain('301')
+    expect(detailsRow.text()).toContain('Dr. Smith')
+    expect(detailsRow?.classes()).toContain('justify-center')
+    expect(detailsRow?.classes()).toContain('font-bold')
+    expect(wrapper.find('.bi-clock').exists()).toBe(false)
+    const courseIdentity = wrapper.find('.schedule-card-content > div:nth-child(2)')
+    expect(courseIdentity.text()).toContain('CS101')
+    expect(courseIdentity.text()).toContain('Data Structures')
+    expect(courseIdentity.classes()).toContain('text-lg')
+    expect(courseIdentity.classes()).toContain('font-bold')
+  })
+
+  it('uses Contact Teacher when no room is provided', () => {
+    const course: Course = {
+      id: 'cs101',
+      code: 'CS101',
+      name: 'Data Structures',
+      days: [0],
+      start: 540,
+      end: 660,
+      color: '#123456',
+    }
+    const occurrence: PlacedOccurrence = {
+      courseId: course.id,
+      day: 0,
+      start: course.start,
+      end: course.end,
+      lane: 0,
+    }
+    const wrapper = mount(CardContent, {
+      props: { course, occurrence },
+      global: { plugins: [i18n] },
+    })
+
+    expect(wrapper.text()).toContain('Contact Teacher')
+    expect(wrapper.text()).toContain('—')
+    expect(wrapper.text()).toContain('Not specified')
   })
 
   it('shows credits after the course code in the subject box', () => {
@@ -101,5 +139,13 @@ describe('CardContent.vue', () => {
     })
 
     expect((wrapper.element as HTMLElement).style.color).toBe('rgb(17, 17, 17)')
+  })
+
+  it('uses a white background with the course color as border in the outline theme', () => {
+    useSettingsStore().setTheme('outline')
+    const styles = useContrast().getCardStyles('#2563EB')
+
+    expect(styles.background).toBe('#FFFFFF')
+    expect(styles.border).toBe('2px solid #2563EB')
   })
 })
