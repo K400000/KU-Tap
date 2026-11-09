@@ -36,9 +36,10 @@ const tooltipTitle = computed(() => {
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
   const sectionNumber = props.occurrence.section === 'lab' ? c.lab?.section : c.section
+  const room = props.occurrence.section === 'lab' ? c.lab?.room ?? c.room : c.room
   const parts = [`${c.code}${sectionNumber ? ` (${sectionNumber})` : ''} — ${c.name}`, `${section}: ${day} ${range}`]
   if (c.credits !== undefined) parts.push(`${t('form.credits')}: ${c.credits}`)
-  parts.push(`${t('scheduleCard.room')}: ${c.room || t('scheduleCard.contactTeacher')}`)
+  parts.push(`${t('scheduleCard.room')}: ${room || t('scheduleCard.contactTeacher')}`)
   parts.push(`${t('scheduleCard.section')}: ${sectionNumber || '—'}`)
   parts.push(`${t('scheduleCard.instructor')}: ${c.instructor || t('scheduleCard.notSpecified')}`)
   return parts.join('\n')
@@ -51,9 +52,10 @@ const ariaLabel = computed(() => {
   const range = formatRange(props.occurrence.start, props.occurrence.end)
   const section = t(`courseType.${props.occurrence.section ?? 'lec'}`)
   const sectionNumber = props.occurrence.section === 'lab' ? c.lab?.section : c.section
+  const room = props.occurrence.section === 'lab' ? c.lab?.room ?? c.room : c.room
   const details = [
     c.credits !== undefined ? `${t('form.credits')}: ${c.credits}` : '',
-    `${t('scheduleCard.room')}: ${c.room || t('scheduleCard.contactTeacher')}`,
+    `${t('scheduleCard.room')}: ${room || t('scheduleCard.contactTeacher')}`,
     `${t('scheduleCard.section')}: ${sectionNumber || '—'}`,
     `${t('scheduleCard.instructor')}: ${c.instructor || t('scheduleCard.notSpecified')}`,
   ].filter(Boolean)

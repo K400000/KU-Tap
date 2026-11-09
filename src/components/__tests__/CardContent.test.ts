@@ -94,6 +94,43 @@ describe('CardContent.vue', () => {
     expect(wrapper.text()).toContain('Not specified')
   })
 
+  it('shows the lab section and lab room on a lab schedule card', () => {
+    const course: Course = {
+      id: 'cs101',
+      code: 'CS101',
+      name: 'Data Structures',
+      room: 'SC2-401',
+      section: '800',
+      lab: {
+        section: '830',
+        room: 'SC2-402',
+        days: [4],
+        start: 780,
+        end: 900,
+      },
+      days: [0],
+      start: 540,
+      end: 660,
+      color: '#123456',
+    }
+    const occurrence: PlacedOccurrence = {
+      courseId: course.id,
+      day: 4,
+      start: 780,
+      end: 900,
+      lane: 0,
+      section: 'lab',
+    }
+    const wrapper = mount(CardContent, {
+      props: { course, occurrence },
+      global: { plugins: [i18n] },
+    })
+
+    expect(wrapper.findAll('span').some((span) => span.text() === '830')).toBe(true)
+    expect(wrapper.find('.schedule-card-details').text()).toContain('SC2-402')
+    expect(wrapper.find('.schedule-card-details').text()).not.toContain('SC2-401')
+  })
+
   it('shows credits after the course code in the subject box', () => {
     const store = useScheduleStore()
     store.addCourse({

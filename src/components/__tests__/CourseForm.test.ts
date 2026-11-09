@@ -88,10 +88,13 @@ describe('CourseForm.vue', () => {
     await wrapper.find('#field-code').setValue('CS101')
     await wrapper.find('#field-name').setValue('Data Structures')
     await wrapper.find('#field-section').setValue('800')
+    await wrapper.find('#field-room').setValue('SC2-401')
     await wrapper.find('button[aria-label="Monday"], button[aria-label="วันจันทร์"]').trigger('click')
     const addLabButton = wrapper.findAll('button').find((button) => /Add Lab|เพิ่ม Lab/.test(button.text()))
     if (!addLabButton) throw new Error('Add Lab button was not rendered')
     await addLabButton.trigger('click')
+    expect((wrapper.find('#field-lab-room').element as HTMLInputElement).value).toBe('SC2-401')
+    await wrapper.find('#field-lab-room').setValue('SC2-402')
     expect(wrapper.find('#field-lab-section').attributes('required')).toBeDefined()
     await wrapper.find('#field-lab-section').setValue('830')
     const fridayButtons = wrapper.findAll('button[aria-label="Friday"], button[aria-label="วันศุกร์"]')
@@ -101,7 +104,13 @@ describe('CourseForm.vue', () => {
     await wrapper.find('form').trigger('submit.prevent')
 
     expect(store.courses).toHaveLength(1)
-    expect(store.courses[0]?.lab).toEqual({ section: '830', days: [4], start: 780, end: 900 })
+    expect(store.courses[0]?.lab).toEqual({
+      section: '830',
+      room: 'SC2-402',
+      days: [4],
+      start: 780,
+      end: 900,
+    })
   })
 
   it('randomizes course colors from the active theme palette', async () => {

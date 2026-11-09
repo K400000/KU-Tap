@@ -72,6 +72,9 @@ export function validateCourse(
   }
 
   if (data.lab) {
+    if (data.lab.room && data.lab.room.length > 20) {
+      errors.push({ field: 'labRoom', message: 'validation.roomMaxLength' })
+    }
     if (!data.lab.section?.trim()) {
       errors.push({ field: 'labSection', message: 'validation.sectionRequired' })
     } else if (data.lab.section.trim().length > 20) {

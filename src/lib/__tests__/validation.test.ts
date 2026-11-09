@@ -86,6 +86,15 @@ describe('validateCourse', () => {
 
     expect(errors).toContainEqual({ field: 'labSection', message: 'validation.sectionRequired' })
   })
+
+  it('limits lab room length to 20 characters', () => {
+    const errors = validateCourse({
+      ...validData,
+      lab: { section: '830', room: 'R'.repeat(21), days: [4], start: 780, end: 900 },
+    }, [])
+
+    expect(errors).toContainEqual({ field: 'labRoom', message: 'validation.roomMaxLength' })
+  })
 })
 
 describe('detectConflicts', () => {

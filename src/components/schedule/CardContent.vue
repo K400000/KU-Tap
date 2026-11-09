@@ -12,6 +12,9 @@ const { t } = useI18n()
 const sectionNumber = computed(() => props.occurrence.section === 'lab'
   ? props.course.lab?.section
   : props.course.section)
+const room = computed(() => props.occurrence.section === 'lab'
+  ? props.course.lab?.room ?? props.course.room
+  : props.course.room)
 </script>
 
 <template>
@@ -51,10 +54,10 @@ const sectionNumber = computed(() => props.occurrence.section === 'lab'
     <div class="schedule-card-details flex min-w-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap text-center font-inter text-sm font-bold">
       <span
         class="min-w-0 truncate"
-        :title="`${t('scheduleCard.room')}: ${course.room || t('scheduleCard.contactTeacher')}`"
+        :title="`${t('scheduleCard.room')}: ${room || t('scheduleCard.contactTeacher')}`"
       >
         <i class="bi bi-geo-alt" aria-hidden="true" />
-        {{ course.room || t('scheduleCard.contactTeacher') }}
+        {{ room || t('scheduleCard.contactTeacher') }}
       </span>
       <span class="shrink-0">|</span>
       <span
