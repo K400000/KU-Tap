@@ -4,12 +4,16 @@ import { nanoid } from 'nanoid'
 import type { Course, DayId } from '@/types'
 import { computeRange } from '@/lib/range'
 import { computeDayLayouts } from '@/lib/layout'
+import { createScheduleSerializer, STORAGE_KEY, reportStorageError } from '@/lib/storage'
 
 export const useScheduleStore = defineStore(
   'schedule',
   () => {
     const title = ref('My Schedule')
     const courses = ref<Course[]>([])
+    const locale = ref<'th' | 'en'>('en')
+    const timeFormat = ref<'12h' | '24h-intl' | '24h-th'>('24h-intl')
+    const theme = ref<'dark' | 'minimal' | 'earth' | 'candy' | 'office' | 'outline'>('minimal')
     const selectedCourseId = ref<string | null>(null)
     const hoveredCourseId = ref<string | null>(null)
 
@@ -128,6 +132,9 @@ export const useScheduleStore = defineStore(
     return {
       title,
       courses,
+      locale,
+      timeFormat,
+      theme,
       selectedCourseId,
       hoveredCourseId,
       range,
@@ -141,5 +148,12 @@ export const useScheduleStore = defineStore(
       setTitle,
       loadSampleData,
     }
+  },
+  {
+    persist: {
+      key: STORAGE_KEY,
+      pick: ['courses', 'title', 'locale', 'timeFormat', 'theme'],
+      serializer: createScheduleSerializer(reportStorageError),
+    },
   },
 )

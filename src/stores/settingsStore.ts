@@ -1,13 +1,12 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore, storeToRefs } from 'pinia'
 import type { ThemeId, Locale, TimeFormat } from '@/types'
+import { useScheduleStore } from './scheduleStore'
 
 export const useSettingsStore = defineStore(
   'settings',
   () => {
-    const locale = ref<Locale>('en')
-    const timeFormat = ref<TimeFormat>('24h-intl')
-    const theme = ref<ThemeId>('minimal')
+    const schedule = useScheduleStore()
+    const { locale, timeFormat, theme } = storeToRefs(schedule)
 
     function setLocale(l: Locale) { locale.value = l }
     function setTimeFormat(f: TimeFormat) { timeFormat.value = f }

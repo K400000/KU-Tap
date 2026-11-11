@@ -145,6 +145,16 @@
     "courseUpdated": "Course updated.",
     "courseDeleted": "Course deleted."
   },
+  "storage": {
+    "error": "Browser storage is unavailable or could not be read. Your schedule is available for this session only.",
+    "notice": {
+      "title": "A quick note!",
+      "intro": "This site was made to help you plan and organize your weekly class schedule. It is not connected to any database.",
+      "storage": "Your schedule is saved only in this browser on this device. If you switch devices or use another browser, your existing schedule will not appear. Clearing browser data will also delete it, so we recommend saving an image or PDF as a backup.",
+      "contact": "Have suggestions or found a bug? Contact me at",
+      "dismiss": "Got it"
+    }
+  },
   "aria": {
     "card": "{code} {name}, {day} {start} to {end}, Room {room}",
     "cardNoRoom": "{code} {name}, {day} {start} to {end}",
