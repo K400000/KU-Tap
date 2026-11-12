@@ -34,15 +34,26 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "KU-TaP",
-        "alternateName": "KU-TaP Table Planning",
-        "url": "https://ku-tap.vercel.app/",
-        "description": "เครื่องมือช่วยวางแผนและจัดตารางเรียน พร้อมส่งออกตารางเป็น PNG, JPG หรือ PDF",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Any",
-        "inLanguage": ["th", "en"],
-        "isAccessibleForFree": true
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://ku-tap.vercel.app/#website",
+            "name": "KU-TaP",
+            "alternateName": ["KU TaP", "KU-TaP Table Planning"],
+            "url": "https://ku-tap.vercel.app/",
+            "inLanguage": ["th", "en"]
+          },
+          {
+            "@type": "WebApplication",
+            "name": "KU-TaP",
+            "url": "https://ku-tap.vercel.app/",
+            "description": "เครื่องมือช่วยวางแผนและจัดตารางเรียน พร้อมส่งออกตารางเป็น PNG, JPG หรือ PDF",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Any",
+            "isAccessibleForFree": true,
+            "isPartOf": { "@id": "https://ku-tap.vercel.app/#website" }
+          }
+        ]
       }
     </script>
   </head>
